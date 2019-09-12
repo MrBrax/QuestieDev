@@ -11,7 +11,7 @@ QuestieSearch.LastResult = {
     item = {},
 }
 function QuestieSearch:ResetResults()
-    QuestieSearch.LastResult = {
+    self.LastResult = {
         query = '',
         queryType = '',
         quest = {},
@@ -23,20 +23,20 @@ end
 
 -- Execute a search by name for all types
 function QuestieSearch:ByName(query)
-    QuestieSearch:ResetResults()
-    for k,type in pairs(QuestieSearch.types) do
-        QuestieSearch:Search(query, type)
+    self:ResetResults()
+    for k,type in pairs(self.types) do
+        self:Search(query, type)
     end
-    return QuestieSearch.LastResult
+    return self.LastResult
 end
 
 -- Execute a search by ID for all types
 function QuestieSearch:ByID(query)
-    QuestieSearch:ResetResults()
-    for k,type in pairs(QuestieSearch.types) do
-        QuestieSearch:Search(query, type, "int")
+    self:ResetResults()
+    for k,type in pairs(self.types) do
+        self:Search(query, type, "int")
     end
-    return QuestieSearch.LastResult
+    return self.LastResult
 end
 
 --[[
@@ -69,20 +69,20 @@ function QuestieSearch:Search(query, searchType, queryType)
     minLengthInt = 1
     minLengthChars = 1
     -- Search type specific preparations
-    local actualDatabase;
-    local NAME_KEY;
+    local actualDatabase
+    local NAME_KEY
     if searchType == "npc" then
-        actualDatabase = QuestieDB.npcData;
-        NAME_KEY = QuestieDB.npcKeys.name;
+        actualDatabase = QuestieDB.npcData
+        NAME_KEY = QuestieDB.npcKeys.name
     elseif searchType == "object" then
-        actualDatabase = QuestieDB.objectData;
-        NAME_KEY = QuestieDB.objectKeys.name;
+        actualDatabase = QuestieDB.objectData
+        NAME_KEY = QuestieDB.objectKeys.name
     elseif searchType == "item" then
-        actualDatabase = QuestieDB.itemData;
-        NAME_KEY = QuestieDB.itemKeys.name;
+        actualDatabase = QuestieDB.itemData
+        NAME_KEY = QuestieDB.itemKeys.name
     elseif searchType == "quest" then
-        actualDatabase = QuestieDB.questData;
-        NAME_KEY = QuestieDB.questKeys.name;
+        actualDatabase = QuestieDB.questData
+        NAME_KEY = QuestieDB.questKeys.name
     else
         return
     end
@@ -95,32 +95,32 @@ function QuestieSearch:Search(query, searchType, queryType)
         }
     end
     -- By default the favourites are displayed
-    local database = QuestieFavourites[searchType];
+    local database = QuestieFavourites[searchType]
     local queryLength = string.len(query)
     -- We have a query meeting the minimal search length criteria, change to actualDatabase
     if  (queryLength >= minLengthChars)
         or
         ((tonumber(query) ~= nil) and (queryLength >= minLengthInt))
     then
-        database = actualDatabase;
+        database = actualDatabase
         -- We had a previous whole database search, we can use the smaller QuestieSearch.LastResult to search now
         --[[if  ((tonumber(query) ~= nil) and (queryLength > minLengthInt))
             or
             ((queryLength > minLengthChars) and (queryLength > string.len(QuestieSearch.LastResult.query)))
         then
-            database = QuestieSearch.LastResult[searchType];
+            database = QuestieSearch.LastResult[searchType]
         end]]--
     end
     -- iterate the seleceted database
-    local searchCount = 0;
+    local searchCount = 0
     for id, entryOrBoolean in pairs(database) do
-        local dbEntry;
+        local dbEntry
          -- No search (displaying favourites), or search within previous set of results
         if type(entryOrBoolean) == "boolean" then
-            dbEntry = actualDatabase[id];
+            dbEntry = actualDatabase[id]
         -- Search in whole database
         else
-            dbEntry = entryOrBoolean;
+            dbEntry = entryOrBoolean
         end
         -- This condition does the actual comparison for the search
         if  (dbEntry ~= nil)
@@ -147,13 +147,13 @@ function QuestieSearch:Search(query, searchType, queryType)
                 )
             )
         then -- We have a search result or a favourite to display
-            searchCount = searchCount + 1;
-            QuestieSearch.LastResult[searchType][id] = true;
+            searchCount = searchCount + 1
+            self.LastResult[searchType][id] = true
         else -- This entry doesn't meet the search criteria, removed from the last results
-            QuestieSearch.LastResult[searchType][id] = nil;
+            self.LastResult[searchType][id] = nil
         end
     end
-    QuestieSearch.LastResult.query = query
-    QuestieSearch.LastResult.queryType = queryType
-    return QuestieSearch.LastResult[searchType]
+    self.LastResult.query = query
+    self.LastResult.queryType = queryType
+    return self.LastResult[searchType]
 end

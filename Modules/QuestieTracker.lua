@@ -159,7 +159,7 @@ local function _SetTomTomTarget(title, zone, x, y)
 end
 
 local function _UnFocus() -- reset HideIcons to match savedvariable state
-    if not Questie.db.char.TrackerFocus then return; end
+    if not Questie.db.char.TrackerFocus then return end
     for quest in pairs (qCurrentQuestlog) do
         local Quest = QuestieDB:GetQuest(quest)
         if Quest.Objectives then
@@ -225,7 +225,7 @@ local function _FlashObjectiveByTexture(Objective) -- really terrible animation 
         -- ugly code
         for questId, framelist in pairs(qQuestIdFrames) do
             for index, frameName in ipairs(framelist) do
-                local icon = _G[frameName];
+                local icon = _G[frameName]
                 if not icon.miniMapIcon then
 
                     -- todo: move into frame.session
@@ -286,13 +286,13 @@ local function _FlashObjectiveByTexture(Objective) -- really terrible animation 
         --    for _, frame in pairs(toFlash) do
         --        frame:SetWidth(frame._size)
         --        frame:SetHeight(frame._size)
-        --      frame._size = nil; frame._sizemul = nil
+        --      frame._size = nil frame._sizemul = nil
         --    end
         --end)
         C_Timer.After(6*0.28+0.7, function()
             for questId, framelist in pairs(qQuestIdFrames) do
                 for index, frameName in ipairs(framelist) do
-                    local icon = _G[frameName];
+                    local icon = _G[frameName]
                     if icon._hidden_by_flash then
                         icon._hidden_by_flash = nil
                         icon:Show()
@@ -309,7 +309,7 @@ local function _FlashObjective(Objective) -- really terrible animation code, sor
         -- ugly code
         for questId, framelist in pairs(qQuestIdFrames) do
             for index, frameName in ipairs(framelist) do
-                local icon = _G[frameName];
+                local icon = _G[frameName]
                 if not icon.miniMapIcon then
 
                     -- todo: move into frame.session
@@ -371,7 +371,7 @@ local function _FlashObjective(Objective) -- really terrible animation code, sor
                             C_Timer.After(0.5, function()
                                 for questId, framelist in pairs(qQuestIdFrames) do
                                     for index, frameName in ipairs(framelist) do
-                                        local icon = _G[frameName];
+                                        local icon = _G[frameName]
                                         if icon._hidden_by_flash then
                                             icon._hidden_by_flash = nil
                                             icon:Show()
@@ -394,7 +394,7 @@ local function _FlashFinisher(Quest) -- really terrible animation copypasta, sor
     for questId, framelist in pairs(qQuestIdFrames) do
         if questId ~= Quest.Id then
             for index, frameName in ipairs(framelist) do
-                local icon = _G[frameName];
+                local icon = _G[frameName]
                 if not icon.miniMapIcon then
 
                     -- todo: move into frame.session
@@ -406,7 +406,7 @@ local function _FlashFinisher(Quest) -- really terrible animation copypasta, sor
             end
         else
             for index, frameName in ipairs(framelist) do
-                local icon = _G[frameName];
+                local icon = _G[frameName]
                 if not icon.miniMapIcon then
                     icon._size = icon:GetWidth()
                     table.insert(toFlash, icon)
@@ -450,7 +450,7 @@ local function _FlashFinisher(Quest) -- really terrible animation copypasta, sor
                         C_Timer.After(0.5, function()
                             for questId, framelist in pairs(qQuestIdFrames) do
                                 for index, frameName in ipairs(framelist) do
-                                    local icon = _G[frameName];
+                                    local icon = _G[frameName]
                                     if icon._hidden_by_flash then
                                         icon._hidden_by_flash = nil
                                         icon:Show()
@@ -529,14 +529,14 @@ local function _BuildMenu(Quest)
         if Objective.HideIcons then
             table.insert(objectiveMenu, {text = QuestieLocale:GetUIString('TRACKER_SHOW_ICONS'), func = function()
                 LQuestie_CloseDropDownMenus()
-                Objective.HideIcons = nil;
+                Objective.HideIcons = nil
                 QuestieQuest:UpdateHiddenNotes()
                 Questie.db.char.TrackerHiddenObjectives[tostring(Quest.Id) .. " " .. tostring(Objective.Index)] = nil
             end})
         else
             table.insert(objectiveMenu, {text = QuestieLocale:GetUIString('TRACKER_HIDE_ICONS'), func = function()
                 LQuestie_CloseDropDownMenus()
-                Objective.HideIcons = true;
+                Objective.HideIcons = true
                 QuestieQuest:UpdateHiddenNotes()
                 Questie.db.char.TrackerHiddenObjectives[tostring(Quest.Id) .. " " .. tostring(Objective.Index)] = true
             end})
@@ -558,7 +558,7 @@ local function _BuildMenu(Quest)
                 Quest.HideIcons = nil
                 needHiddenUpdate = true
             end
-            if needHiddenUpdate then QuestieQuest:UpdateHiddenNotes(); end
+            if needHiddenUpdate then QuestieQuest:UpdateHiddenNotes() end
             _ShowObjectiveOnMap(Objective)
         end})
 
@@ -584,14 +584,14 @@ local function _BuildMenu(Quest)
             if Objective.HideIcons then
                 table.insert(objectiveMenu, {text = QuestieLocale:GetUIString('TRACKER_SHOW_ICONS'), func = function()
                     LQuestie_CloseDropDownMenus()
-                    Objective.HideIcons = nil;
+                    Objective.HideIcons = nil
                     QuestieQuest:UpdateHiddenNotes()
                     Questie.db.char.TrackerHiddenObjectives[tostring(Quest.Id) .. " " .. tostring(Objective.Index)] = nil
                 end})
             else
                 table.insert(objectiveMenu, {text = QuestieLocale:GetUIString('TRACKER_HIDE_ICONS'), func = function()
                     LQuestie_CloseDropDownMenus()
-                    Objective.HideIcons = true;
+                    Objective.HideIcons = true
                     QuestieQuest:UpdateHiddenNotes()
                     Questie.db.char.TrackerHiddenObjectives[tostring(Quest.Id) .. " " .. tostring(Objective.Index)] = true
                 end})
@@ -613,7 +613,7 @@ local function _BuildMenu(Quest)
                     Quest.HideIcons = nil
                     needHiddenUpdate = true
                 end
-                if needHiddenUpdate then QuestieQuest:UpdateHiddenNotes(); end
+                if needHiddenUpdate then QuestieQuest:UpdateHiddenNotes() end
                 _ShowObjectiveOnMap(Objective)
             end})
 
@@ -660,7 +660,7 @@ local function _BuildMenu(Quest)
     end})
     if GetCVar("autoQuestWatch") == "0" then
         table.insert(menu, {text=QuestieLocale:GetUIString('TRACKER_UNTRACK'), func = function()
-            LQuestie_CloseDropDownMenus();
+            LQuestie_CloseDropDownMenus()
             Questie.db.char.TrackedQuests[Quest.Id] = nil
             QuestieTracker:Update()
         end})
@@ -717,7 +717,7 @@ function QuestieTracker:QuestRemoved(id)
 end
 
 function QuestieTracker:Initialize()
-    if QuestieTracker.started or (not Questie.db.global.trackerEnabled) then return; end
+    if self.started or (not Questie.db.global.trackerEnabled) then return end
     if not Questie.db.char.TrackerHiddenQuests then
         Questie.db.char.TrackerHiddenQuests = {}
     end
@@ -727,11 +727,11 @@ function QuestieTracker:Initialize()
     if not Questie.db.char.TrackedQuests then
         Questie.db.char.TrackedQuests = {}
     end
-    _QuestieTracker.baseFrame = QuestieTracker:CreateBaseFrame()
+    _QuestieTracker.baseFrame = self:CreateBaseFrame()
     _QuestieTracker.menuFrame = LQuestie_Create_UIDropDownMenu("QuestieTrackerMenuFrame", UIParent)
 
     if Questie.db.global.hookTracking then
-        QuestieTracker:HookBaseTracker()
+        self:HookBaseTracker()
     end
 
     -- this number is static, I doubt it will ever need more
@@ -810,7 +810,7 @@ end
 local index = 0
 function _QuestieTracker:GetNextLine()
     index = index + 1
-    return _QuestieTracker.LineFrames[index]
+    return self.LineFrames[index]
 end
 
 _QuestieTracker.HexTableHack = {
@@ -818,7 +818,7 @@ _QuestieTracker.HexTableHack = {
 }
 function _QuestieTracker:PrintProgressColor(percent, text)
     local hexGreen, hexRed, hexBlue =
-    _QuestieTracker.HexTableHack[5 + math.floor(percent * 10)], _QuestieTracker.HexTableHack[8 + math.floor((1-percent) * 6)], _QuestieTracker.HexTableHack[4 + math.floor(percent * 6)]
+    self.HexTableHack[5 + math.floor(percent * 10)], self.HexTableHack[8 + math.floor((1-percent) * 6)], self.HexTableHack[4 + math.floor(percent * 6)]
     return "|cFF"..hexRed..hexGreen..hexBlue..text.."|r"
 end
 
@@ -827,60 +827,60 @@ local function RGBToHex(r, g, b)
     if r > 255 then r = 255; end
     if g > 255 then g = 255; end
     if b > 255 then b = 255; end
-    return string.format("|cFF%02x%02x%02x", r, g, b);
+    return string.format("|cFF%02x%02x%02x", r, g, b)
 end
 local function fRGBToHex(r, g, b)
-    return RGBToHex(r*254, g*254, b*254);
+    return RGBToHex(r*254, g*254, b*254)
 end
 function _QuestieTracker:getRGBForObjective(Objective)
-    if not Objective.Collected or type(Objective.Collected) ~= "number" then return 0.8,0.8,0.8; end
+    if not Objective.Collected or type(Objective.Collected) ~= "number" then return 0.8,0.8,0.8 end
     local float = Objective.Collected / Objective.Needed
 
     if Questie.db.global.trackerColorObjectives == "whiteToGreen" then
-        return fRGBToHex(0.8-float/2, 0.8+float/3, 0.8-float/2);
+        return fRGBToHex(0.8-float/2, 0.8+float/3, 0.8-float/2)
     else
-        if float < .49 then return fRGBToHex(1, 0+float/.5, 0); end
-        if float == .50 then return fRGBToHex(1, 1, 0); end
-        if float > .50 then return fRGBToHex(1-float/2, 1, 0); end
+        if float < .49 then return fRGBToHex(1, 0+float/.5, 0) end
+        if float == .50 then return fRGBToHex(1, 1, 0) end
+        if float > .50 then return fRGBToHex(1-float/2, 1, 0) end
     end
-    --return fRGBToHex(0.8-float/2, 0.8+float/3, 0.8-float/2);
+    --return fRGBToHex(0.8-float/2, 0.8+float/3, 0.8-float/2)
 
     --[[if QuestieConfig.boldColors == false then
         if not (type(objective) == "function") then
-            local lastIndex = findLast(objective, ":");
+            local lastIndex = findLast(objective, ":")
             if not (lastIndex == nil) then
-                local progress = string.sub(objective, lastIndex+2);
-                local slash = findLast(progress, "/");
-                local have = tonumber(string.sub(progress, 0, slash-1));
-                local need = tonumber(string.sub(progress, slash+1));
-                if not have or not need then return 0.8, 0.8, 0.8; end
-                local float = have / need;
-                return 0.8-float/2, 0.8+float/3, 0.8-float/2;
+                local progress = string.sub(objective, lastIndex+2)
+                local slash = findLast(progress, "/")
+                local have = tonumber(string.sub(progress, 0, slash-1))
+                local need = tonumber(string.sub(progress, slash+1))
+                if not have or not need then return 0.8, 0.8, 0.8 end
+                local float = have / need
+                return 0.8-float/2, 0.8+float/3, 0.8-float/2
             end
         end
-        return 0.3, 1, 0.3;
+        return 0.3, 1, 0.3
     else
         if not (type(objective) == "function") then
-            local lastIndex = findLast(objective, ":");
+            local lastIndex = findLast(objective, ":")
             if not (lastIndex == nil) then
-                local progress = string.sub(objective, lastIndex+2);
-                local slash = findLast(progress, "/");
-                local have = tonumber(string.sub(progress, 0, slash-1));
-                local need = tonumber(string.sub(progress, slash+1));
-                if not have or not need then return 1, 0, 0; end
-                local float = have / need;
-                if float < .49 then return 1, 0+float/.5, 0; end
-                if float == .50 then return 1, 1, 0; end
-                if float > .50 then return 1-float/2, 1, 0; end
+                local progress = string.sub(objective, lastIndex+2)
+                local slash = findLast(progress, "/")
+                local have = tonumber(string.sub(progress, 0, slash-1))
+                local need = tonumber(string.sub(progress, slash+1))
+                if not have or not need then return 1, 0, 0 end
+                local float = have / need
+                if float < .49 then return 1, 0+float/.5, 0 end
+                if float == .50 then return 1, 1, 0 end
+                if float > .50 then return 1-float/2, 1, 0 end
             end
         end
-        return 0, 1, 0;
+        return 0, 1, 0
     end]]--
 end
 
 
 function QuestieTracker:Update()
-    if (not QuestieTracker.started) or (not Questie.db.global.trackerEnabled) then return; end
+    if (not self.started) or (not Questie.db.global.trackerEnabled) then return end
     index = 0 -- zero because it simplifies GetNextLine()
     -- populate tracker
     local trackerWidth = 0
@@ -894,7 +894,7 @@ function QuestieTracker:Update()
             questCompletePercent[Quest.Id] = 1
         else
             local percent = 0
-            local count = 0;
+            local count = 0
             for _,Objective in pairs(Quest.Objectives) do
                 percent = percent + (Objective.Collected / Objective.Needed)
                 count = count + 1
@@ -1029,7 +1029,7 @@ local function _AQW_Insert(index, expire)
 end
 
 function QuestieTracker:HookBaseTracker()
-    if _QuestieTracker._alreadyHooked then return; end
+    if _QuestieTracker._alreadyHooked then return end
     hooksecurefunc("AutoQuestWatch_Insert", _AQW_Insert)
     hooksecurefunc("RemoveQuestWatch", _RemoveQuestWatch)
 
@@ -1043,7 +1043,7 @@ function QuestieTracker:HookBaseTracker()
     -- totally prevent the blizzard tracker frame from showing (BAD CODE, shouldn't be needed but some have had trouble)
     QuestWatchFrame:HookScript("OnShow", function(self) self:Hide() end)
 
-    QuestieTracker._alreadyHooked = true
+    self._alreadyHooked = true
 end
 
 function QuestieTracker:ResetLocation()

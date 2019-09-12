@@ -2,30 +2,30 @@
 
 QuestieStreamLib = {}
 
-QuestieStreamLib._buffer = {};
-QuestieStreamLib._pointer = 0;
-QuestieStreamLib._size = 0;
+QuestieStreamLib._buffer = {}
+QuestieStreamLib._pointer = 0
+QuestieStreamLib._size = 0
 
 -- shift level table
-QSL_dltab = {};
-QSL_dltab[string.byte("x")] = 0;
-QSL_dltab[string.byte("y")] = 1;
-QSL_dltab[string.byte("z")] = 2;
+QSL_dltab = {}
+QSL_dltab[string.byte("x")] = 0
+QSL_dltab[string.byte("y")] = 1
+QSL_dltab[string.byte("z")] = 2
 
 -- translation table
-QSL_dttab = {};
-QSL_dttab[123] = 1;
-QSL_dttab[124] = 6;
-QSL_dttab[125] = 59;
+QSL_dttab = {}
+QSL_dttab[123] = 1
+QSL_dttab[124] = 6
+QSL_dttab[125] = 59
 
-QSL_ltab = {};
-QSL_ttab = {};
-QSL_ltab[0] = "x";
-QSL_ltab[1] = "y";
-QSL_ltab[2] = "z";
-QSL_ttab[34] = 123;
-QSL_ttab[39] = 124;
-QSL_ttab[92] = 125;
+QSL_ltab = {}
+QSL_ttab = {}
+QSL_ltab[0] = "x"
+QSL_ltab[1] = "y"
+QSL_ltab[2] = "z"
+QSL_ttab[34] = 123
+QSL_ttab[39] = 124
+QSL_ttab[92] = 125
 
 local StreamPool = {}
 
@@ -36,7 +36,7 @@ function QuestieStreamLib:getStream() -- returns a new stream
     else
         stream = {}
     end
-    for k,v in pairs(QuestieStreamLib) do -- copy functions to new object
+    for k,v in pairs(self) do -- copy functions to new object
         stream[k] = v
     end
     stream._size = 0
@@ -52,62 +52,62 @@ end
 
 
 function QuestieStreamLib:setPointer(pointer)
-    self._pointer = pointer;
+    self._pointer = pointer
 end
 
 function QuestieStreamLib:readByte()
-    local r = self._buffer[self._pointer];
-    self._pointer = self._pointer + 1;
-    return r;
+    local r = self._buffer[self._pointer]
+    self._pointer = self._pointer + 1
+    return r
 end
 
 function QuestieStreamLib:readBytes(count)
-    local ret = {};
+    local ret = {}
     for i=1,count do
-        table.insert(ret, self:readByte());
+        table.insert(ret, self:readByte())
     end
     return unpack(ret)
 end
 
 function QuestieStreamLib:readShorts(count)
-    local ret = {};
+    local ret = {}
     for i=1,count do
-        table.insert(ret, self:readShort());
+        table.insert(ret, self:readShort())
     end
     return unpack(ret)
 end
 
 function QuestieStreamLib:readShort()
-    return bit.lshift(self:readByte(), 8) + self:readByte();
+    return bit.lshift(self:readByte(), 8) + self:readByte()
 end
 
 function QuestieStreamLib:readInt()
-    return bit.lshift(self:readByte(), 24) + bit.lshift(self:readByte(), 16) + bit.lshift(self:readByte(), 8) + self:readByte();
+    return bit.lshift(self:readByte(), 24) + bit.lshift(self:readByte(), 16) + bit.lshift(self:readByte(), 8) + self:readByte()
 end
 
 function QuestieStreamLib:readTinyString()
-    local length = self:readByte();
-    local ret = "";
+    local length = self:readByte()
+    local ret = ""
     for i = 1, length do
         ret = ret .. string.char(self:readByte()) -- bad lua code is bad
     end
-    return ret;
+    return ret
 end
 
 function QuestieStreamLib:readShortString()
-    local length = self:readShort();
-    local ret = "";
+    local length = self:readShort()
+    local ret = ""
     for i = 1, length do
         ret = ret .. string.char(self:readByte()) -- bad lua code is bad
     end
-    return ret;
+    return ret
 end
 
 function QuestieStreamLib:writeByte(val)
-    --print("wbyte: " .. val);
-    self._buffer[self._pointer] = mod(val, 256);
-    --print("wbyte: " .. _buffer[_pointer]);
-    self._pointer = self._pointer + 1;
+    --print("wbyte: " .. val)
+    self._buffer[self._pointer] = mod(val, 256)
+    --print("wbyte: " .. _buffer[_pointer])
+    self._pointer = self._pointer + 1
 end
 
 function QuestieStreamLib:writeBytes(...)
@@ -123,34 +123,34 @@ function QuestieStreamLib:writeShorts(...)
 end
 
 function QuestieStreamLib:writeShort(val)
-    --print("wshort: " .. val);
-    self:writeByte(mod(bit.rshift(val, 8), 256));
-    self:writeByte(mod(val, 256));
+    --print("wshort: " .. val)
+    self:writeByte(mod(bit.rshift(val, 8), 256))
+    self:writeByte(mod(val, 256))
 end
 
 function QuestieStreamLib:writeInt(val)
-    self:writeByte(mod(bit.rshift(val, 24), 256));
-    self:writeByte(mod(bit.rshift(val, 16), 256));
-    self:writeByte(mod(bit.rshift(val, 8), 256));
-    self:writeByte(mod(val, 256));
+    self:writeByte(mod(bit.rshift(val, 24), 256))
+    self:writeByte(mod(bit.rshift(val, 16), 256))
+    self:writeByte(mod(bit.rshift(val, 8), 256))
+    self:writeByte(mod(val, 256))
 end
 
 function QuestieStreamLib:writeTinyString(val)
-    self:writeByte(string.len(val));
+    self:writeByte(string.len(val))
     for i=1,string.len(val) do
-        self:writeByte(string.byte(val, i));
+        self:writeByte(string.byte(val, i))
     end
 end
 
 function QuestieStreamLib:writeShortString(val)
-    self:writeShort(string.len(val));
+    self:writeShort(string.len(val))
     for i=1,string.len(val) do
-        self:writeByte(string.byte(val, i));
+        self:writeByte(string.byte(val, i))
     end
 end
 
 function QuestieStreamLib:save()
-    local lmt = 0;
+    local lmt = 0
     local result = ""
     if self._size < self._pointer then
         self._size = self._pointer
@@ -160,7 +160,7 @@ function QuestieStreamLib:save()
         if e == nil then
             return result
         end
-        local level = math.floor(e / 86);
+        local level = math.floor(e / 86)
         if not (lmt == level) then
             lmt = level
             result = result .. QSL_ltab[level]
@@ -177,7 +177,7 @@ function QuestieStreamLib:save()
 end
 
 function QuestieStreamLib:savePart(limit)
-    local lmt = 0;
+    local lmt = 0
     local result = ""
     if self._size < self._pointer then
         self._size = self._pointer
@@ -187,8 +187,8 @@ function QuestieStreamLib:savePart(limit)
     end
     for i=1,limit do
         local e = self:readByte()
-        if not e then return result; end
-        local level = math.floor(e / 86);
+        if not e then return result end
+        local level = math.floor(e / 86)
         if not (lmt == level) then
             lmt = level
             result = result .. QSL_ltab[level]
@@ -205,40 +205,40 @@ function QuestieStreamLib:savePart(limit)
 end
 
 function QuestieStreamLib:loadPart(bin)
-    local level = 0;
+    local level = 0
     for i = 1, string.len(bin) do
-        local v = string.byte(bin, i);
-        --print(v);
+        local v = string.byte(bin, i)
+        --print(v)
         if QSL_dltab[v] == nil then
             if QSL_dttab[v] then
-                self:writeByte(level * 86 + QSL_dttab[v]);
+                self:writeByte(level * 86 + QSL_dttab[v])
             else
-                self:writeByte(level * 86 + v - 33);
+                self:writeByte(level * 86 + v - 33)
             end
         else
-            level = QSL_dltab[v];
+            level = QSL_dltab[v]
         end
     end
-    self._size = self._pointer;
+    self._size = self._pointer
 end
 
 function QuestieStreamLib:load(bin)
-    self._pointer = 0;
-    self._size = 0;
-    local level = 0;
+    self._pointer = 0
+    self._size = 0
+    local level = 0
     for i = 1, string.len(bin) do
-        local v = string.byte(bin, i);
-        --print(v);
+        local v = string.byte(bin, i)
+        --print(v)
         if QSL_dltab[v] == nil then
             if QSL_dttab[v] then
-                self:writeByte(level * 86 + QSL_dttab[v]);
+                self:writeByte(level * 86 + QSL_dttab[v])
             else
-                self:writeByte(level * 86 + v - 33);
+                self:writeByte(level * 86 + v - 33)
             end
         else
-            level = QSL_dltab[v];
+            level = QSL_dltab[v]
         end
     end
-    self._size = self._pointer;
-    self._pointer = 0;
+    self._size = self._pointer
+    self._pointer = 0
 end

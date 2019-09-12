@@ -88,7 +88,7 @@ function QuestieAuto_QUEST_DETAIL(event, ...)
     if(Questie.db.char.autoaccept) then
         if QuestGetAutoAccept() then
             Questie:Debug(DEBUG_INFO, "Quest already accepted")
-            local QuestFrameButton = _G["QuestFrameAcceptButton"];
+            local QuestFrameButton = _G["QuestFrameAcceptButton"]
             if(QuestFrameButton:IsVisible()) then
                 Questie:Debug(DEBUG_INFO, "Blizzard auto-accept workaround")
                 QuestFrameButton:Click("Accept Quest")
@@ -104,7 +104,7 @@ end
 
 -- I was forced to make decision on offhand, cloak and shields separate from armor but I can't pick up my mind about the reason...
 function QuestieAuto_QUEST_COMPLETE(event, ...)
-    Questie:Debug(DEBUG_DEVELOP, event, ...);
+    Questie:Debug(DEBUG_DEVELOP, event, ...)
     -- blasted Lands citadel wonderful NPC. They do not trigger any events except quest_complete.
     --if not AllowedToHandle() then
     --    return
@@ -112,10 +112,10 @@ function QuestieAuto_QUEST_COMPLETE(event, ...)
 
     local questname = GetTitleText()
     local numOptions = GetNumQuestChoices()
-    Questie:Debug(DEBUG_DEVELOP, event, questname, numOptions, ...);
+    Questie:Debug(DEBUG_DEVELOP, event, questname, numOptions, ...)
 
     if numOptions > 1 then
-        Questie:Debug(DEBUG_DEVELOP, "Multiple rewards! ", numOptions);
+        Questie:Debug(DEBUG_DEVELOP, "Multiple rewards! ", numOptions)
         local function getItemId(typeStr)
             local link = GetQuestItemLink(typeStr, 1) --first item is enough
             return link and link:match("%b::"):gsub(":", "")
@@ -123,13 +123,13 @@ function QuestieAuto_QUEST_COMPLETE(event, ...)
 
         local itemID = getItemId("choice")
         if (not itemID) then
-            Questie:Debug(DEBUG_DEVELOP, "Can't read reward link from server. Close NPC dialogue and open it again.");
+            Questie:Debug(DEBUG_DEVELOP, "Can't read reward link from server. Close NPC dialogue and open it again.")
             return
         end
-        Questie:Debug(DEBUG_INFO, "Multiple rewards! Please choose appropriate reward!");
+        Questie:Debug(DEBUG_INFO, "Multiple rewards! Please choose appropriate reward!")
 
     else
         Questie:TurnInQuest(1)
-        Questie:Debug(DEBUG_DEVELOP, "Completed quest!");
+        Questie:Debug(DEBUG_DEVELOP, "Completed quest!")
     end
 end

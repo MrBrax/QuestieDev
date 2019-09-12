@@ -1,4 +1,4 @@
-QuestieComms = {};
+QuestieComms = {}
 
 QC_WRITE_ALLGUILD = 1
 QC_WRITE_ALLGROUP = 2
@@ -33,8 +33,8 @@ end
 QuestieComms.packets = {
     [QC_ID_BROADCAST_QUEST_UPDATE] = {
         write = function(self)
-            local count = 0;
-            for _ in pairs(self.quest.Objectives) do count = count + 1; end -- why does lua suck
+            local count = 0
+            for _ in pairs(self.quest.Objectives) do count = count + 1 end -- why does lua suck
 
             self.stream:writeShort(self.quest.Id)
             self.stream:writeByte(count)
@@ -102,8 +102,8 @@ QuestieComms.packets = {
         write = function(self)
             local version = QuestieGetVersionString()
             local latest = _QuestieChangeLog[version]
-            local count = 0;
-            for _ in pairs(latest) do count = count + 1; end -- why does lua suck
+            local count = 0
+            for _ in pairs(latest) do count = count + 1 end -- why does lua suck
             self.stream:writeBytes(count)
             self.stream:writeShortString(version)
             for _,change in pairs(latest) do
@@ -134,8 +134,8 @@ QuestieComms.packets = {
     },
     [QC_ID_ASK_QUESTS] = {
         write = function(self)
-            local count = 0;
-            for _ in pairs(self.quests) do count = count + 1; end -- why does lua suck
+            local count = 0
+            for _ in pairs(self.quests) do count = count + 1 end -- why does lua suck
             self.stream:writeByte(count)
             for _,id in pairs(self.quests) do
                 self.stream:writeShort(id)
@@ -143,7 +143,7 @@ QuestieComms.packets = {
         end,
         read = function(self)
             local count = self.stream:readByte()
-            local quests = {};
+            local quests = {}
             for i=1,count do
                 local qid = self.stream:readShort()
                 local quest = QuestieDB:GetQuest(qid)
@@ -161,13 +161,13 @@ QuestieComms.packets = {
     },
     [QC_ID_SEND_QUESTS] = {
         write = function(self)
-            local count = 0;
-            for _ in pairs(self.quests) do count = count + 1; end -- why does lua suck
+            local count = 0
+            for _ in pairs(self.quests) do count = count + 1 end -- why does lua suck
             self.stream:writeByte(count)
             for _,quest in pairs(self.quests) do
                 self.stream:writeShort(quest.Id)
-                local count = 0;
-                for _ in pairs(quest.Objectives) do count = count + 1; end -- why does lua suck
+                local count = 0
+                for _ in pairs(quest.Objectives) do count = count + 1 end -- why does lua suck
                 self.stream:writeByte(count)
                 for index,v in pairs(quest.Objectives) do
                     self.stream:writeBytes(index, v.Needed, v.Collected)
@@ -210,8 +210,8 @@ QuestieComms.packets = {
     },
     [QC_ID_SEND_QUESTSLIST] = {
         write = function(self)
-            local count = 0;
-            for _ in pairs(qCurrentQuestlog) do count = count + 1; end -- why does lua suck
+            local count = 0
+            for _ in pairs(qCurrentQuestlog) do count = count + 1 end -- why does lua suck
             self.stream:writeByte(count)
             for id,_ in pairs(qCurrentQuestlog) do
                 self.stream:writeShort(id)
@@ -247,13 +247,13 @@ end
 function QuestieComms:read(rawPacket, sourceType, source)
     local stream = QuestieStreamLib:getStream()
     stream:load(rawPacket)
-    local packetProcessor = QuestieComms.packets[stream:readByte()];
+    local packetProcessor = QuestieComms.packets[stream:readByte()]
     if (not packetProcessor) or (not packetProcessor.read) then
         -- invalid packet id, error or something
         return
     end
 
-    local context = {};
+    local context = {}
     context.stream = stream
     context.type = sourceType
     context.source = source
@@ -263,7 +263,7 @@ function QuestieComms:read(rawPacket, sourceType, source)
 end
 
 function QuestieComms:getPacket(id)
-    local pkt = {};
+    local pkt = {}
     for k,v in pairs(QuestieComms.packets[id]) do
         pkt[k] = v
     end
@@ -288,7 +288,7 @@ function _makeSegments(packet)
         metaStream:finished()
         return {meta .. ' ' .. packet.stream:save()}
     end
-    local ret = {};
+    local ret = {}
     local count = math.ceil(packet.stream._size / 128.0)
     packet.stream:setPointer(0)
     for i=1,count do
@@ -367,7 +367,7 @@ function QuestieComms:MessageReceived(channel, message, type, source) -- pcall t
             for i=1,count do
                 pkt.stream:loadPart(QuestieComms.packetReadQueue[source][packetid][i])
             end
-            pkt.stream._pointer = 0;
+            pkt.stream._pointer = 0
             pkt.player = source
             pkt:read()
             QuestieComms.packetReadQueue[source][packetid] = nil

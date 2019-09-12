@@ -43,9 +43,9 @@ local function SetGlobalOptionLocal(info, value)
     Questie.db.global[info[#info]] = value
 end
 
-local _optionsTimer = nil;
-local _QuestieOptions = {...};
-_QuestieOptions.configFrame = nil;
+local _optionsTimer = nil
+local _QuestieOptions = {...}
+_QuestieOptions.configFrame = nil
 
 -- Initialize LangNameLookup & LangQuestLookup
 LangNameLookup = LangNameLookup[GetLocale()] or {}
@@ -63,7 +63,7 @@ end
 function _QuestieOptions:Delay(time, func, message)
     if(_optionsTimer) then
         Questie:CancelTimer(_optionsTimer)
-        _optionsTimer = nil;
+        _optionsTimer = nil
     end
     _optionsTimer = Questie:ScheduleTimer(function()
         func()
@@ -82,19 +82,19 @@ end
 
 function _QuestieOptions:OpenConfigWindow()
 
-    if not _QuestieOptions.configFrame then
-        _QuestieOptions.configFrame = AceGUI:Create("Frame");
-        _QuestieOptions.configFrame:Hide();
+    if not self.configFrame then
+        self.configFrame = AceGUI:Create("Frame")
+        self.configFrame:Hide()
 
-        _G["QuestieConfigFrame"] = _QuestieOptions.configFrame.frame;
-        table.insert(UISpecialFrames, "QuestieConfigFrame");
+        _G["QuestieConfigFrame"] = self.configFrame.frame
+        table.insert(UISpecialFrames, "QuestieConfigFrame")
     end
 
-    if not _QuestieOptions.configFrame:IsShown() then
-        PlaySound(882);
-        LibStub("AceConfigDialogQuestie-3.0"):Open("Questie", _QuestieOptions.configFrame)
+    if not self.configFrame:IsShown() then
+        PlaySound(882)
+        LibStub("AceConfigDialogQuestie-3.0"):Open("Questie", self.configFrame)
     else
-        _QuestieOptions.configFrame:Hide();
+        self.configFrame:Hide()
     end
 end
 
@@ -192,7 +192,7 @@ local options = {
                                 return Questie.db.char.enabled
                             end,
                     set =    function (info, value)
-                                QuestieQuest:ToggleNotes(value);
+                                QuestieQuest:ToggleNotes(value)
                                 Questie.db.char.enabled = value
                             end,
                 },
@@ -210,11 +210,11 @@ local options = {
                             width = "full",
                             disabled = function() return (not Questie.db.char.enabled) end,
                             get =    function ()
-                                        return Questie.db.global.enableMapIcons;
+                                        return Questie.db.global.enableMapIcons
                                     end,
                             set =    function (info, value)
                                         Questie.db.global.enableMapIcons = value
-                                        QuestieQuest:UpdateHiddenNotes();
+                                        QuestieQuest:UpdateHiddenNotes()
                                     end,
                         },
                         enableMiniMapToggle = {
@@ -225,11 +225,11 @@ local options = {
                             width = "full",
                             disabled = function() return (not Questie.db.char.enabled) end,
                             get =    function ()
-                                        return Questie.db.global.enableMiniMapIcons;
+                                        return Questie.db.global.enableMiniMapIcons
                                     end,
                             set =    function (info, value)
                                         Questie.db.global.enableMiniMapIcons = value
-                                        QuestieQuest:UpdateHiddenNotes();
+                                        QuestieQuest:UpdateHiddenNotes()
                                     end,
                         },
                         seperatingHeader = {
@@ -245,11 +245,11 @@ local options = {
                             width = "full",
                             disabled = function() return (not Questie.db.char.enabled) end,
                             get =    function ()
-                                        return Questie.db.global.enableObjectives;
+                                        return Questie.db.global.enableObjectives
                                     end,
                             set =    function (info, value)
                                         Questie.db.global.enableObjectives = value
-                                        QuestieQuest:UpdateHiddenNotes();
+                                        QuestieQuest:UpdateHiddenNotes()
                                     end,
                         },
                         enableTurninsToggle = {
@@ -260,11 +260,11 @@ local options = {
                             width = "full",
                             disabled = function() return (not Questie.db.char.enabled) end,
                             get =    function ()
-                                        return Questie.db.global.enableTurnins;
+                                        return Questie.db.global.enableTurnins
                                     end,
                             set =    function (info, value)
                                         Questie.db.global.enableTurnins = value
-                                        QuestieQuest:UpdateHiddenNotes();
+                                        QuestieQuest:UpdateHiddenNotes()
                                     end,
                         },
                         enableAvailableToggle = {
@@ -275,11 +275,11 @@ local options = {
                             width = "full",
                             disabled = function() return (not Questie.db.char.enabled) end,
                             get =    function ()
-                                        return Questie.db.global.enableAvailable;
+                                        return Questie.db.global.enableAvailable
                                     end,
                             set =    function (info, value)
                                         Questie.db.global.enableAvailable = value
-                                        QuestieQuest:UpdateHiddenNotes();
+                                        QuestieQuest:UpdateHiddenNotes()
                                     end,
                         },
                     },
@@ -291,15 +291,15 @@ local options = {
                     desc = function() return QuestieLocale:GetUIString('ENABLE_ICON_DESC') end,
                     width = "full",
                     get =    function ()
-                                return not Questie.db.profile.minimap.hide;
+                                return not Questie.db.profile.minimap.hide
                             end,
                     set =    function (info, value)
-                                Questie.db.profile.minimap.hide = not value;
+                                Questie.db.profile.minimap.hide = not value
 
                                 if value then
-                                    Questie.minimapConfigIcon:Show("MinimapIcon");
+                                    Questie.minimapConfigIcon:Show("MinimapIcon")
                                 else
-                                    Questie.minimapConfigIcon:Hide("MinimapIcon");
+                                    Questie.minimapConfigIcon:Hide("MinimapIcon")
                                 end
                             end,
                 },
@@ -310,13 +310,13 @@ local options = {
                     desc = function() return QuestieLocale:GetUIString('ENABLE_INSTANT_DESC') end,
                     width = "full",
                     get =    function ()
-                                if GetCVar("instantQuestText") == '1' then return true else return false end;
+                                if GetCVar("instantQuestText") == '1' then return true else return false end
                             end,
                     set =    function (info, value)
                                 if value then
-                                    SetCVar("instantQuestText", 1);
+                                    SetCVar("instantQuestText", 1)
                                 else
-                                    SetCVar("instantQuestText", 0);
+                                    SetCVar("instantQuestText", 0)
                                 end
                             end,
                 },
@@ -327,7 +327,7 @@ local options = {
                     desc = function() return QuestieLocale:GetUIString('ENABLE_TOOLTIPS_DESC') end,
                     width = "full",
                     get =    function ()
-                                return Questie.db.global.enableTooltips;
+                                return Questie.db.global.enableTooltips
                             end,
                     set =    function (info, value)
                                 Questie.db.global.enableTooltips = value
@@ -351,7 +351,7 @@ local options = {
                             end,
                     set =    function (info, value)
                                 Questie.db.char.lowlevel = value
-                                _QuestieOptions.AvailableQuestRedraw();
+                                _QuestieOptions.AvailableQuestRedraw()
                                 Questie:debug(DEBUG_DEVELOP, QuestieLocale:GetUIString('DEBUG_LOWLEVEL'), value)
                             end,
                 },
@@ -397,7 +397,7 @@ local options = {
                   get = GetGlobalOptionLocal,
                   set = function (info, value)
                         _QuestieOptions:Delay(0.5, _QuestieOptions.ClusterRedraw, QuestieLocale:GetUIString('DEBUG_CLUSTER', value))
-                        QUESTIE_NOTES_CLUSTERMUL_HACK = value;
+                        QUESTIE_NOTES_CLUSTERMUL_HACK = value
                         SetGlobalOptionLocal(info, value)
                         end,
                 },
@@ -516,7 +516,7 @@ local options = {
                         SetGlobalOptionLocal(info, value)
 
                         if not value then
-                            QuestieCoords.ResetMinimapText();
+                            QuestieCoords.ResetMinimapText()
                         end
                     end,
                 },
@@ -544,9 +544,9 @@ local options = {
                                 SetGlobalOptionLocal(info, value)
 
                                 if value then
-                                    Questie_Toggle:Show();
+                                    Questie_Toggle:Show()
                                 else
-                                    Questie_Toggle:Hide();
+                                    Questie_Toggle:Hide()
                                 end
                             end,
                 },
@@ -689,7 +689,7 @@ local options = {
                         SetGlobalOptionLocal(info, value)
 
                         if not value then
-                            QuestieCoords.ResetMapText();
+                            QuestieCoords.ResetMapText()
                         end
                     end,
                 },
@@ -839,7 +839,7 @@ local options = {
                     min = 2,
                     max = 36,
                     step = 0.5,
-                    get = function() return Questie.db.global.trackerFontSizeHeader; end,
+                    get = function() return Questie.db.global.trackerFontSizeHeader end,
                     set = function (info, value)
 						Questie.db.global.trackerFontSizeHeader = value
 						QuestieTracker:_ResetLinesForFontChange()
@@ -855,7 +855,7 @@ local options = {
                     min = 2,
                     max = 36,
                     step = 0.5,
-                    get = function() return Questie.db.global.trackerFontSizeLine; end,
+                    get = function() return Questie.db.global.trackerFontSizeLine end,
                     set = function (info, value)
 						Questie.db.global.trackerFontSizeLine = value
 						QuestieTracker:_ResetLinesForFontChange()
@@ -871,7 +871,7 @@ local options = {
                     min = 0,
                     max = 24,
                     step = 1,
-                    get = function() return Questie.db.global.trackerQuestPadding; end,
+                    get = function() return Questie.db.global.trackerQuestPadding end,
                     set = function (info, value)
 						Questie.db.global.trackerQuestPadding = value
 						QuestieTracker:Update()
@@ -913,7 +913,7 @@ local options = {
 
                                 -- on false, hide current nameplates
                                 if not value then
-                                    QuestieNameplate:HideCurrentFrames();
+                                    QuestieNameplate:HideCurrentFrames()
                                 end
                             end,
                 },
@@ -975,10 +975,10 @@ local options = {
                     desc = function() return QuestieLocale:GetUIString('NAMEPLATE_RESET_BTN_DESC') end,
                     disabled = function() return not Questie.db.global.nameplateEnabled end,
                     func = function (info, value)
-                        Questie.db.global.nameplateX = _QuestieOptions.defaults.global.nameplateX;
-                        Questie.db.global.nameplateY = _QuestieOptions.defaults.global.nameplateY;
-                        Questie.db.global.nameplateScale = _QuestieOptions.defaults.global.nameplateScale;
-                        QuestieNameplate:redrawIcons();
+                        Questie.db.global.nameplateX = _QuestieOptions.defaults.global.nameplateX
+                        Questie.db.global.nameplateY = _QuestieOptions.defaults.global.nameplateY
+                        Questie.db.global.nameplateScale = _QuestieOptions.defaults.global.nameplateScale
+                        QuestieNameplate:redrawIcons()
                     end,
                 },
                 Spacer_C = _QuestieOptions:Spacer(9),
@@ -1000,9 +1000,9 @@ local options = {
 
                                 -- on false, hide current nameplates
                                 if not value then
-                                    QuestieNameplate:HideCurrentTargetFrame();
+                                    QuestieNameplate:HideCurrentTargetFrame()
                                 else
-                                    QuestieNameplate:DrawTargetFrame();
+                                    QuestieNameplate:DrawTargetFrame()
                                 end
                             end,
                 },
@@ -1064,10 +1064,10 @@ local options = {
                     desc = function() return QuestieLocale:GetUIString('TARGET_RESET_BTN_DESC') end,
                     disabled = function() return not Questie.db.global.nameplateTargetFrameEnabled end,
                     func = function (info, value)
-                        Questie.db.global.nameplateTargetFrameX = _QuestieOptions.defaults.global.nameplateTargetFrameX;
-                        Questie.db.global.nameplateTargetFrameY = _QuestieOptions.defaults.global.nameplateTargetFrameY;
-                        Questie.db.global.nameplateTargetFrameScale = _QuestieOptions.defaults.global.nameplateTargetFrameScale;
-                        QuestieNameplate:redrawFrameIcon();
+                        Questie.db.global.nameplateTargetFrameX = _QuestieOptions.defaults.global.nameplateTargetFrameX
+                        Questie.db.global.nameplateTargetFrameY = _QuestieOptions.defaults.global.nameplateTargetFrameY
+                        Questie.db.global.nameplateTargetFrameScale = _QuestieOptions.defaults.global.nameplateTargetFrameScale
+                        QuestieNameplate:redrawFrameIcon()
                     end,
                 },
             },
@@ -1135,11 +1135,11 @@ local options = {
                     },
                     style = 'dropdown',
                     name = function() return QuestieLocale:GetUIString('LOCALE_DROP') end,
-                    get = function() return QuestieLocale:GetUILocale(); end,
+                    get = function() return QuestieLocale:GetUILocale() end,
                     set = function(input, lang)
-                        QuestieLocale:SetUILocale(lang);
-                        Questie.db.global.questieLocale = lang;
-                        Questie.db.global.questieLocaleDiff = true;
+                        QuestieLocale:SetUILocale(lang)
+                        Questie.db.global.questieLocale = lang
+                        Questie.db.global.questieLocaleDiff = true
                     end,
                 },
                 Spacer_C = _QuestieOptions:Spacer(20),
@@ -1168,41 +1168,41 @@ local options = {
 
                         -- only toggle questie if it's off (must be called before resetting the value)
                         if not Questie.db.char.enabled then
-                            QuestieQuest:ToggleNotes();
+                            QuestieQuest:ToggleNotes()
                         end
 
-                        Questie.db.char.enabled = _QuestieOptions.defaults.char.enabled;
-                        Questie.db.char.lowlevel = _QuestieOptions.defaults.char.lowlevel;
+                        Questie.db.char.enabled = _QuestieOptions.defaults.char.enabled
+                        Questie.db.char.lowlevel = _QuestieOptions.defaults.char.lowlevel
 
-                        Questie.db.profile.minimap.hide = _QuestieOptions.defaults.profile.minimap.hide;
+                        Questie.db.profile.minimap.hide = _QuestieOptions.defaults.profile.minimap.hide
 
                         -- update minimap icon to default
                         if not Questie.db.profile.minimap.hide then
-                            Questie.minimapConfigIcon:Show("MinimapIcon");
+                            Questie.minimapConfigIcon:Show("MinimapIcon")
                         else
-                            Questie.minimapConfigIcon:Hide("MinimapIcon");
+                            Questie.minimapConfigIcon:Hide("MinimapIcon")
                         end
 
                         -- update map / minimap coordinates reset
                         if not Questie.db.global.minimapCoordinatesEnabled then
-                            QuestieCoords.ResetMinimapText();
+                            QuestieCoords.ResetMinimapText()
                         end
 
                         if not Questie.db.global.mapCoordinatesEnabled then
-                            QuestieCoords.ResetMapText();
+                            QuestieCoords.ResetMapText()
                         end
 
                         -- Reset the show/hide on map
                         if Questie.db.global.mapShowHideEnabled then
-                            Questie_Toggle:Show();
+                            Questie_Toggle:Show()
                         else
-                            Questie_Toggle:Hide();
+                            Questie_Toggle:Hide()
                         end
 
-                        _QuestieOptions:Delay(0.3, _QuestieOptions.AvailableQuestRedraw, "minLevelFilter and maxLevelFilter reset to defaults");
+                        _QuestieOptions:Delay(0.3, _QuestieOptions.AvailableQuestRedraw, "minLevelFilter and maxLevelFilter reset to defaults")
 
-                        QuestieNameplate:redrawIcons();
-                        QuestieMap:rescaleIcons();
+                        QuestieNameplate:redrawIcons()
+                        QuestieMap:rescaleIcons()
 
                     end,
                 },
@@ -1228,13 +1228,13 @@ local minimapIconLDB = LibStub("LibDataBroker-1.1"):NewDataObject("MinimapIcon",
     OnClick = function (self, button)
         if button == "LeftButton" then
             if IsShiftKeyDown() then
-                QuestieQuest:ToggleNotes();
+                QuestieQuest:ToggleNotes()
 
                 -- CLose config window if it's open to avoid desyncing the Checkbox
                 if _QuestieOptions.configFrame and _QuestieOptions.configFrame:IsShown() then
-                    _QuestieOptions.configFrame:Hide();
+                    _QuestieOptions.configFrame:Hide()
                 end
-                return;
+                return
             elseif IsControlKeyDown() then
                 QuestieQuest:SmoothReset()
                 return
@@ -1243,69 +1243,69 @@ local minimapIconLDB = LibStub("LibDataBroker-1.1"):NewDataObject("MinimapIcon",
             _QuestieOptions.OpenConfigWindow()
 
             if QuestieJourney:IsShown() then
-                QuestieJourney.toggleJourneyWindow();
+                QuestieJourney.toggleJourneyWindow()
             end
-            return;
+            return
 
         elseif button == "RightButton" then
             if not IsModifierKeyDown() then
                 -- CLose config window if it's open to avoid desyncing the Checkbox
                 if _QuestieOptions.configFrame and _QuestieOptions.configFrame:IsShown() then
-                    _QuestieOptions.configFrame:Hide();
+                    _QuestieOptions.configFrame:Hide()
                 end
 
-                QuestieJourney.toggleJourneyWindow();
-                return;
+                QuestieJourney.toggleJourneyWindow()
+                return
             elseif IsControlKeyDown() then
-                Questie.db.profile.minimap.hide = true;
-                Questie.minimapConfigIcon:Hide("MinimapIcon");
-                return;
+                Questie.db.profile.minimap.hide = true
+                Questie.minimapConfigIcon:Hide("MinimapIcon")
+                return
             end
         end
     end,
 
     OnTooltipShow = function (tooltip)
-        tooltip:AddLine("Questie", 1, 1, 1);
-        tooltip:AddLine (Questie:Colorize(QuestieLocale:GetUIString('ICON_LEFT_CLICK') , 'gray') .. ": ".. QuestieLocale:GetUIString('ICON_TOGGLE'));
-        tooltip:AddLine (Questie:Colorize(QuestieLocale:GetUIString('ICON_SHIFTLEFT_CLICK') , 'gray') .. ": ".. QuestieLocale:GetUIString('ICON_TOGGLE_QUESTIE'));
-        tooltip:AddLine (Questie:Colorize(QuestieLocale:GetUIString('ICON_RIGHT_CLICK') , 'gray') .. ": ".. QuestieLocale:GetUIString('ICON_JOURNEY'));
-        tooltip:AddLine (Questie:Colorize(QuestieLocale:GetUIString('ICON_CTRLRIGHT_CLICK') , 'gray') .. ": ".. QuestieLocale:GetUIString('ICON_HIDE'));
-        tooltip:AddLine (Questie:Colorize(QuestieLocale:GetUIString('ICON_CTRLLEFT_CLICK'),   'gray') .. ": ".. QuestieLocale:GetUIString('ICON_RELOAD'));
+        tooltip:AddLine("Questie", 1, 1, 1)
+        tooltip:AddLine (Questie:Colorize(QuestieLocale:GetUIString('ICON_LEFT_CLICK') , 'gray') .. ": ".. QuestieLocale:GetUIString('ICON_TOGGLE'))
+        tooltip:AddLine (Questie:Colorize(QuestieLocale:GetUIString('ICON_SHIFTLEFT_CLICK') , 'gray') .. ": ".. QuestieLocale:GetUIString('ICON_TOGGLE_QUESTIE'))
+        tooltip:AddLine (Questie:Colorize(QuestieLocale:GetUIString('ICON_RIGHT_CLICK') , 'gray') .. ": ".. QuestieLocale:GetUIString('ICON_JOURNEY'))
+        tooltip:AddLine (Questie:Colorize(QuestieLocale:GetUIString('ICON_CTRLRIGHT_CLICK') , 'gray') .. ": ".. QuestieLocale:GetUIString('ICON_HIDE'))
+        tooltip:AddLine (Questie:Colorize(QuestieLocale:GetUIString('ICON_CTRLLEFT_CLICK'),   'gray') .. ": ".. QuestieLocale:GetUIString('ICON_RELOAD'))
     end,
-});
+})
 
 
 function Questie:OnInitialize()
     self.db = LibStub("AceDB-3.0"):New("QuestieConfig", _QuestieOptions.defaults, true)
 
     -- Set proper locale. Either default to client Locale or override based on user.
-    if Questie.db.global.questieLocaleDiff then
-        QuestieLocale:SetUILocale(Questie.db.global.questieLocale);
+    if self.db.global.questieLocaleDiff then
+        QuestieLocale:SetUILocale(self.db.global.questieLocale)
     else
-        QuestieLocale:SetUILocale(GetLocale());
+        QuestieLocale:SetUILocale(GetLocale())
     end
 
-    Questie:Debug(DEBUG_CRITICAL, "Questie addon loaded")
-    Questie:RegisterEvent("PLAYER_ENTERING_WORLD", QuestieEventHandler.PLAYER_ENTERING_WORLD)
+    self:Debug(DEBUG_CRITICAL, "Questie addon loaded")
+    self:RegisterEvent("PLAYER_ENTERING_WORLD", QuestieEventHandler.PLAYER_ENTERING_WORLD)
 
     --Accepted Events
-    Questie:RegisterEvent("QUEST_ACCEPTED", QuestieEventHandler.QUEST_ACCEPTED)
-    Questie:RegisterEvent("QUEST_WATCH_UPDATE", QuestieEventHandler.QUEST_WATCH_UPDATE);
-    Questie:RegisterEvent("QUEST_TURNED_IN", QuestieEventHandler.QUEST_TURNED_IN)
-    Questie:RegisterEvent("QUEST_REMOVED", QuestieEventHandler.QUEST_REMOVED)
-    Questie:RegisterEvent("PLAYER_LEVEL_UP", QuestieEventHandler.PLAYER_LEVEL_UP);
-    Questie:RegisterEvent("QUEST_LOG_UPDATE", QuestieEventHandler.QUEST_LOG_UPDATE);
-    Questie:RegisterEvent("MODIFIER_STATE_CHANGED", QuestieEventHandler.MODIFIER_STATE_CHANGED);
+    self:RegisterEvent("QUEST_ACCEPTED", QuestieEventHandler.QUEST_ACCEPTED)
+    self:RegisterEvent("QUEST_WATCH_UPDATE", QuestieEventHandler.QUEST_WATCH_UPDATE)
+    self:RegisterEvent("QUEST_TURNED_IN", QuestieEventHandler.QUEST_TURNED_IN)
+    self:RegisterEvent("QUEST_REMOVED", QuestieEventHandler.QUEST_REMOVED)
+    self:RegisterEvent("PLAYER_LEVEL_UP", QuestieEventHandler.PLAYER_LEVEL_UP)
+    self:RegisterEvent("QUEST_LOG_UPDATE", QuestieEventHandler.QUEST_LOG_UPDATE)
+    self:RegisterEvent("MODIFIER_STATE_CHANGED", QuestieEventHandler.MODIFIER_STATE_CHANGED)
 
     --TODO: QUEST_QUERY_COMPLETE Will get all quests the character has finished, need to be implemented!
 
     -- Nameplate / Tar5get Frame Objective Events
-    Questie:RegisterEvent("NAME_PLATE_UNIT_ADDED", QuestieNameplate.NameplateCreated);
-    Questie:RegisterEvent("NAME_PLATE_UNIT_REMOVED", QuestieNameplate.NameplateDestroyed);
-    Questie:RegisterEvent("PLAYER_TARGET_CHANGED", QuestieNameplate.DrawTargetFrame);
+    self:RegisterEvent("NAME_PLATE_UNIT_ADDED", QuestieNameplate.NameplateCreated)
+    self:RegisterEvent("NAME_PLATE_UNIT_REMOVED", QuestieNameplate.NameplateDestroyed)
+    self:RegisterEvent("PLAYER_TARGET_CHANGED", QuestieNameplate.DrawTargetFrame)
 
     -- Initialize Coordinates
-    QuestieCoords.Initialize();
+    QuestieCoords.Initialize()
 
     -- Initialize questiecomms
     --C_ChatInfo.RegisterAddonMessagePrefix("questie")
@@ -1313,38 +1313,38 @@ function Questie:OnInitialize()
     --Questie:RegisterEvent("CHAT_MSG_ADDON", QuestieComms.MessageReceived)
 
     -- Initialize Journey Window
-    QuestieJourney.Initialize();
+    QuestieJourney.Initialize()
 
 
     -- Register Slash Commands
-    Questie:RegisterChatCommand("questieclassic", "QuestieSlash")
-    Questie:RegisterChatCommand("questie", "QuestieSlash")
+    self:RegisterChatCommand("questieclassic", "QuestieSlash")
+    self:RegisterChatCommand("questie", "QuestieSlash")
 
     LibStub("AceConfigQuestie-3.0"):RegisterOptionsTable("Questie", options)
-    self.configFrame = LibStub("AceConfigDialogQuestie-3.0"):AddToBlizOptions("Questie", "Questie");
+    self.configFrame = LibStub("AceConfigDialogQuestie-3.0"):AddToBlizOptions("Questie", "Questie")
 
     --Initialize the DB settings.
-    Questie:debug(DEBUG_DEVELOP, QuestieLocale:GetUIString('DEBUG_CLUSTER', Questie.db.global.clusterLevel))
-    QUESTIE_NOTES_CLUSTERMUL_HACK = Questie.db.global.clusterLevel;
+    self:debug(DEBUG_DEVELOP, QuestieLocale:GetUIString('DEBUG_CLUSTER', self.db.global.clusterLevel))
+    QUESTIE_NOTES_CLUSTERMUL_HACK = self.db.global.clusterLevel
 
 
     -- Creating the minimap config icon
-    Questie.minimapConfigIcon = LibStub("LibDBIcon-1.0");
-    Questie.minimapConfigIcon:Register("MinimapIcon", minimapIconLDB, Questie.db.profile.minimap);
+    self.minimapConfigIcon = LibStub("LibDBIcon-1.0")
+    self.minimapConfigIcon:Register("MinimapIcon", minimapIconLDB, self.db.profile.minimap)
 
     -- Update the default text on the map show/hide button for localization
-    if Questie.db.char.enabled then
-        Questie_Toggle:SetText(QuestieLocale:GetUIString('QUESTIE_MAP_BUTTON_HIDE'));
+    if self.db.char.enabled then
+        Questie_Toggle:SetText(QuestieLocale:GetUIString('QUESTIE_MAP_BUTTON_HIDE'))
     else
-        Questie_Toggle:SetText(QuestieLocale:GetUIString('QUESTIE_MAP_BUTTON_SHOW'));
+        Questie_Toggle:SetText(QuestieLocale:GetUIString('QUESTIE_MAP_BUTTON_SHOW'))
         QuestieQuest:ToggleNotes(false)
     end
 
     -- Update status of Map button on hide between play sessions
-    if Questie.db.global.mapShowHideEnabled then
-        Questie_Toggle:Show();
+    if self.db.global.mapShowHideEnabled then
+        Questie_Toggle:Show()
     else
-        Questie_Toggle:Hide();
+        Questie_Toggle:Hide()
     end
 end
 
@@ -1362,37 +1362,37 @@ end
 
 function Questie:QuestieSlash(input)
 
-    input = string.trim(input, " ");
+    input = string.trim(input, " ")
 
     -- /questie
     if input == "" or not input then
-        _QuestieOptions.OpenConfigWindow();
+        _QuestieOptions.OpenConfigWindow()
 
         if QuestieJourney:IsShown() then
-            QuestieJourney.toggleJourneyWindow();
+            QuestieJourney.toggleJourneyWindow()
         end
-        return ;
+        return
     end
 
     -- /questie help || /questie ?
     if input == "help" or input == "?" then
-        print(Questie:Colorize(QuestieLocale:GetUIString('SLASH_HEAD'), 'yellow'));
-        print(Questie:Colorize(QuestieLocale:GetUIString('SLASH_CONFIG'), 'yellow'));
-        print(Questie:Colorize(QuestieLocale:GetUIString('SLASH_TOGGLE_QUESTIE'), 'yellow'));
-        print(Questie:Colorize(QuestieLocale:GetUIString('SLASH_MINIMAP'), 'yellow'));
-        print(Questie:Colorize(QuestieLocale:GetUIString('SLASH_JOURNEY'), 'yellow'));
-        return;
+        print(self:Colorize(QuestieLocale:GetUIString('SLASH_HEAD'), 'yellow'))
+        print(self:Colorize(QuestieLocale:GetUIString('SLASH_CONFIG'), 'yellow'))
+        print(self:Colorize(QuestieLocale:GetUIString('SLASH_TOGGLE_QUESTIE'), 'yellow'))
+        print(self:Colorize(QuestieLocale:GetUIString('SLASH_MINIMAP'), 'yellow'))
+        print(self:Colorize(QuestieLocale:GetUIString('SLASH_JOURNEY'), 'yellow'))
+        return
     end
 
     -- /questie toggle
     if input == "toggle" then
-        QuestieQuest:ToggleNotes();
+        QuestieQuest:ToggleNotes()
 
         -- CLose config window if it's open to avoid desyncing the Checkbox
         if _QuestieOptions.configFrame and _QuestieOptions.configFrame:IsShown() then
-             _QuestieOptions.configFrame:Hide();
+             _QuestieOptions.configFrame:Hide()
         end
-        return;
+        return
     end
 	
     if input == "reload" then
@@ -1402,42 +1402,42 @@ function Questie:QuestieSlash(input)
 
     -- /questie minimap
     if input == "minimap" then
-        Questie.db.profile.minimap.hide = not Questie.db.profile.minimap.hide;
+        self.db.profile.minimap.hide = not self.db.profile.minimap.hide
 
-        if Questie.db.profile.minimap.hide then
-            Questie.minimapConfigIcon:Hide("MinimapIcon");
+        if self.db.profile.minimap.hide then
+            self.minimapConfigIcon:Hide("MinimapIcon")
         else
-            Questie.minimapConfigIcon:Show("MinimapIcon");
+            self.minimapConfigIcon:Show("MinimapIcon")
         end
-        return;
+        return
     end
 
     -- /questie journey
     if input == "journey" then
-        QuestieJourney.toggleJourneyWindow();
+        QuestieJourney.toggleJourneyWindow()
 
         if _QuestieOptions.configFrame and _QuestieOptions.configFrame:IsShown() then
-            _QuestieOptions.configFrame:Hide();
+            _QuestieOptions.configFrame:Hide()
        end
-        return;
+        return
     end
 
-    print(Questie:Colorize("[Questie] :: ", 'yellow') .. QuestieLocale:GetUIString('SLASH_INVALID') .. Questie:Colorize('/questie help', 'yellow'));
+    print(self:Colorize("[Questie] :: ", 'yellow') .. QuestieLocale:GetUIString('SLASH_INVALID') .. self:Colorize('/questie help', 'yellow'))
 end
 
 function Questie:Colorize(str, color)
-    local c = '';
+    local c = ''
 
     if color == 'red' then
-        c = '|cffff0000';
+        c = '|cffff0000'
     elseif color == 'gray' then
-        c = '|cFFCFCFCF';
+        c = '|cFFCFCFCF'
     elseif color == 'purple' then
-        c = '|cFFB900FF';
+        c = '|cFFB900FF'
     elseif color == 'blue' then
-        c = '|cB900FFFF';
+        c = '|cB900FFFF'
     elseif color == 'yellow' then
-        c = '|cFFFFB900';
+        c = '|cFFFFB900'
     end
 
     return c .. str .. "|r"
@@ -1445,37 +1445,37 @@ end
 
 function Questie:GetClassColor(class)
 
-    class = string.lower(class);
+    class = string.lower(class)
 
     if class == 'druid' then
-        return '|cFFFF7D0A';
+        return '|cFFFF7D0A'
     elseif class == 'hunter' then
-        return '|cFFABD473';
+        return '|cFFABD473'
     elseif class == 'mage' then
-        return '|cFF69CCF0';
+        return '|cFF69CCF0'
     elseif class == 'paladin' then
-        return '|cFFF58CBA';
+        return '|cFFF58CBA'
     elseif class == 'priest' then
-        return '|cFFFFFFFF';
+        return '|cFFFFFFFF'
     elseif class == 'rogue' then
-        return '|cFFFFF569';
+        return '|cFFFFF569'
     elseif class == 'shaman' then
-        return '|cFF0070DE';
+        return '|cFF0070DE'
     elseif class == 'warlock' then
-        return '|cFF9482C9';
+        return '|cFF9482C9'
     elseif class == 'warrior' then
-        return '|cFFC79C6E';
+        return '|cFFC79C6E'
     else
-        return '|cffff0000'; -- error red
+        return '|cffff0000' -- error red
     end
 end
 
 function Questie:Error(...)
-    Questie:Print("|cffff0000[ERROR]|r", ...)
+    self:Print("|cffff0000[ERROR]|r", ...)
 end
 
 function Questie:error(...)
-    Questie:Error(...)
+    self:Error(...)
 end
 
 --debuglevel = 5 --1 Critical, 2 ELEVATED, 3 Info, 4, Develop, 5 SPAM THAT SHIT YO
@@ -1486,28 +1486,28 @@ end
 --DEBUG_SPAM = "5DEBUG"
 
 function Questie:Debug(...)
-    if(Questie.db.global.debugEnabled) then
-        if(Questie.db.global.debugLevel < 5 and select(1, ...) == DEBUG_SPAM)then return; end
-        if(Questie.db.global.debugLevel < 4 and select(1, ...) == DEBUG_DEVELOP)then return; end
-        if(Questie.db.global.debugLevel < 3 and select(1, ...) == DEBUG_INFO)then return; end
-        if(Questie.db.global.debugLevel < 2 and select(1, ...) == DEBUG_ELEVATED)then return; end
-        if(Questie.db.global.debugLevel < 1 and select(1, ...) == DEBUG_CRITICAL)then return; end
+    if(self.db.global.debugEnabled) then
+        if(self.db.global.debugLevel < 5 and select(1, ...) == DEBUG_SPAM)then return end
+        if(self.db.global.debugLevel < 4 and select(1, ...) == DEBUG_DEVELOP)then return end
+        if(self.db.global.debugLevel < 3 and select(1, ...) == DEBUG_INFO)then return end
+        if(self.db.global.debugLevel < 2 and select(1, ...) == DEBUG_ELEVATED)then return end
+        if(self.db.global.debugLevel < 1 and select(1, ...) == DEBUG_CRITICAL)then return end
         --Questie:Print(...)
-        if not Questie.debugSession then
-            Questie.debugSession = GetTime()
+        if not self.debugSession then
+            self.debugSession = GetTime()
             if not QuestieConfigCharacter.log then QuestieConfigCharacter.log = {} end
-            QuestieConfigCharacter.log[Questie.debugSession] = {};
+            QuestieConfigCharacter.log[self.debugSession] = {}
         end
         local entry = {}
         entry.time = GetTime()
         entry.data = {...}
-        table.insert(QuestieConfigCharacter.log[Questie.debugSession], entry)
-        if Questie.db.global.debugEnabledPrint then
-            Questie:Print(...)
+        table.insert(QuestieConfigCharacter.log[self.debugSession], entry)
+        if self.db.global.debugEnabledPrint then
+            self:Print(...)
         end
     end
 end
 
 function Questie:debug(...)
-    Questie:Debug(...)
+    self:Debug(...)
 end

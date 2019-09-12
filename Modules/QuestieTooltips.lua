@@ -1,10 +1,10 @@
 
 -- todo: move this in to a proper global
-QuestieTooltips = {};
-local _QuestieTooltips = {};
+QuestieTooltips = {}
+local _QuestieTooltips = {}
 QuestieTooltips.lastTooltipTime = GetTime() -- hack for object tooltips
 QuestieTooltips.lastGametooltip = ""
-QuestieTooltips.lastGametooltipCount = -1;
+QuestieTooltips.lastGametooltipCount = -1
 
 QuestieTooltips.tooltipLookup = {
     --["u_Grell"] = {questid, {"Line 1", "Line 2"}}
@@ -12,49 +12,49 @@ QuestieTooltips.tooltipLookup = {
 
 
 function QuestieTooltips:OldPrintDifficultyColor(level, text)
-    local PlayerLevel = qPlayerLevel;
-    if level == nil then return "FFFFFFFF"; end
-    local levelDiff = level - qPlayerLevel;
+    local PlayerLevel = qPlayerLevel
+    if level == nil then return "FFFFFFFF" end
+    local levelDiff = level - qPlayerLevel
     if (levelDiff >= 5) then
-        return "|cFFFF1A1A"..text.."|r";
+        return "|cFFFF1A1A"..text.."|r"
     elseif (levelDiff >= 3) then
-        return "|cFFFF8040"..text.."|r";
+        return "|cFFFF8040"..text.."|r"
     elseif (levelDiff >= -2) then
-        return "|cFFFFFF00"..text.."|r";
+        return "|cFFFFFF00"..text.."|r"
     elseif (-levelDiff <= GetQuestGreenRange()) then
-        return "|cFF40C040"..text.."|r";
+        return "|cFF40C040"..text.."|r"
     else
-        return "|cFFC0C0C0"..text.."|r";
+        return "|cFFC0C0C0"..text.."|r"
     end
 end
 
 function QuestieTooltips:PrintDifficultyColor(level, text)
 
     if level == -1 then
-        level = qPlayerLevel;
+        level = qPlayerLevel
     end
-    local PlayerLevel = qPlayerLevel;
+    local PlayerLevel = qPlayerLevel
     if (level > (PlayerLevel + 4)) then
-        return "|cFFFF1A1A"..text.."|r"; -- Red
+        return "|cFFFF1A1A"..text.."|r" -- Red
     elseif (level > (PlayerLevel + 2)) then
-        return "|cFFFF8040"..text.."|r"; -- Orange
+        return "|cFFFF8040"..text.."|r" -- Orange
     elseif (level <= (PlayerLevel + 2)) and (level >= (PlayerLevel - 2)) then
-        return "|cFFFFFF00"..text.."|r"; -- Yellow
+        return "|cFFFFFF00"..text.."|r" -- Yellow
     elseif (level > _QuestieTooltips:GetQuestGreyLevel(PlayerLevel)) then
-        return "|cFF40C040"..text.."|r"; -- Green
+        return "|cFF40C040"..text.."|r" -- Green
     else
-        return "|cFFC0C0C0"..text.."|r"; -- Grey
+        return "|cFFC0C0C0"..text.."|r" -- Grey
     end
-    return "|cFFffffff"..text.."|r"; --white
+    return "|cFFffffff"..text.."|r" --white
 end
 
 function _QuestieTooltips:GetQuestGreyLevel(level)
     if (level <= 5) then
-        return 0;
+        return 0
     elseif (level <= 39) then
-        return (level - math.floor(level / 10) - 5);
+        return (level - math.floor(level / 10) - 5)
     else
-        return (level - math.floor(level / 5) - 1);
+        return (level - math.floor(level / 5) - 1)
     end
 end
 
@@ -64,36 +64,36 @@ end
 --        items: i_
 --      objects: o_
 function QuestieTooltips:RegisterTooltip(questid, key, Objective)
-    if QuestieTooltips.tooltipLookup[key] == nil then
-        QuestieTooltips.tooltipLookup[key] = {};
+    if self.tooltipLookup[key] == nil then
+        self.tooltipLookup[key] = {}
     end
-    local tooltip = {};
-    tooltip.QuestId = questid;
+    local tooltip = {}
+    tooltip.QuestId = questid
     tooltip.Objective = Objective
-    --table.insert(QuestieTooltips.tooltipLookup[key], tooltip);
-    QuestieTooltips.tooltipLookup[key][tostring(questid) .. " " .. Objective.Index] = tooltip
+    --table.insert(self.tooltipLookup[key], tooltip)
+    self.tooltipLookup[key][tostring(questid) .. " " .. Objective.Index] = tooltip
 end
 
 function QuestieTooltips:RemoveTooltip(key)
-    QuestieTooltips.tooltipLookup[key] = nil
+    self.tooltipLookup[key] = nil
 end
 
 function QuestieTooltips:GetTooltip(key)
-    if key == nil or QuestieTooltips.tooltipLookup[key] == nil then
+    if key == nil or self.tooltipLookup[key] == nil then
         return nil
     end
-    local tip = {};
-    for k, tooltip in pairs(QuestieTooltips.tooltipLookup[key]) do
+    local tip = {}
+    for k, tooltip in pairs(self.tooltipLookup[key]) do
         tooltip.Objective:Update() -- update progress
 		
         if not qCurrentQuestlog[tooltip.Objective.QuestData.Id] then 
-            QuestieTooltips.tooltipLookup[key][k] = nil
+            self.tooltipLookup[key][k] = nil
         else
-            table.insert(tip, tooltip.Objective.QuestData:GetColoredQuestName());
+            table.insert(tip, tooltip.Objective.QuestData:GetColoredQuestName())
             if tooltip.Objective.Needed then
-                table.insert(tip, "   |cFF33FF33" .. tostring(tooltip.Objective.Collected) .. "/" .. tostring(tooltip.Objective.Needed) .. " " .. tostring(tooltip.Objective.Description));
+                table.insert(tip, "   |cFF33FF33" .. tostring(tooltip.Objective.Collected) .. "/" .. tostring(tooltip.Objective.Needed) .. " " .. tostring(tooltip.Objective.Description))
             else
-                table.insert(tip, "   |cFF33FF33" .. tostring(tooltip.Objective.Description));
+                table.insert(tip, "   |cFF33FF33" .. tostring(tooltip.Objective.Description))
             end
         end
     end
@@ -101,7 +101,7 @@ function QuestieTooltips:GetTooltip(key)
 end
 
 function QuestieTooltips:RemoveQuest(questid)
-    for k, v in pairs(QuestieTooltips.tooltipLookup) do
+    for k, v in pairs(self.tooltipLookup) do
         local stillHave = false
         for index, tooltip in pairs(v) do
             if tooltip.QuestId == questid then
@@ -111,7 +111,7 @@ function QuestieTooltips:RemoveQuest(questid)
             end
         end
         if not stillHave then
-            QuestieTooltips.tooltipLookup[k] = nil
+            self.tooltipLookup[k] = nil
         end
     end
 end
@@ -121,13 +121,13 @@ end
 
 
 local function TooltipShowing_unit(self)
-    if self.IsForbidden and self:IsForbidden() then return; end
-    if not Questie.db.global.enableTooltips then return; end
+    if self.IsForbidden and self:IsForbidden() then return end
+    if not Questie.db.global.enableTooltips then return end
     --QuestieTooltips.lastTooltipTime = GetTime()
     local name, ttype = self:GetUnit()
     if name and (name ~= lastGametooltipUnit or (not QuestieTooltips.lastGametooltipCount) or _QuestieTooltips:countTooltip() < QuestieTooltips.lastGametooltipCount) then
         QuestieTooltips.lastGametooltipUnit = name
-        local tooltipData = QuestieTooltips:GetTooltip("u_" .. name);
+        local tooltipData = QuestieTooltips:GetTooltip("u_" .. name)
         if tooltipData then
             for _, v in pairs (tooltipData) do
                 GameTooltip:AddLine(v)
@@ -138,12 +138,12 @@ local function TooltipShowing_unit(self)
 end
 
 local function TooltipShowing_item(self)
-    if self.IsForbidden and self:IsForbidden() then return; end
+    if self.IsForbidden and self:IsForbidden() then return end
     --QuestieTooltips.lastTooltipTime = GetTime()
     local name, link = self:GetItem()
     if name and (name ~= QuestieTooltips.lastGametooltipItem or (not QuestieTooltips.lastGametooltipCount) or _QuestieTooltips:countTooltip() < QuestieTooltips.lastGametooltipCount) then
         QuestieTooltips.lastGametooltipItem = name
-        local tooltipData = QuestieTooltips:GetTooltip("i_" .. name);
+        local tooltipData = QuestieTooltips:GetTooltip("i_" .. name)
         if tooltipData then
             for _, v in pairs (tooltipData) do
                 GameTooltip:AddLine(v)
@@ -154,9 +154,9 @@ local function TooltipShowing_item(self)
 end
 
 local function TooltipShowing_maybeobject(name)
-    if not Questie.db.global.enableTooltips then return; end
+    if not Questie.db.global.enableTooltips then return end
     if name then
-        local tooltipData = QuestieTooltips:GetTooltip("o_" .. name);
+        local tooltipData = QuestieTooltips:GetTooltip("o_" .. name)
         if tooltipData then
             for _, v in pairs (tooltipData) do
                 GameTooltip:AddLine(v)

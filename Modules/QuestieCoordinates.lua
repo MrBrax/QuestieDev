@@ -1,8 +1,8 @@
-QuestieCoords = {};
+QuestieCoords = {}
 
-QuestieCoords.updateInterval = 0.3;
-local totalTime = 0;
-local eventHandler = nil;
+QuestieCoords.updateInterval = 0.3
+local totalTime = 0
+local eventHandler = nil
 
 
 local function GetMapTitleText()
@@ -16,12 +16,12 @@ local function GetMapTitleText()
 end
 
 function QuestieCoords:WriteCoords()
-    local mapID;
-    local position;
-    local posX;
-    local posY;
+    local mapID
+    local position
+    local posX
+    local posY
 
-    local precision = "%.".. Questie.db.global.mapCoordinatePrecision .."f";
+    local precision = "%.".. Questie.db.global.mapCoordinatePrecision .."f"
 
     -- if minimap
     if Questie.db.global.minimapCoordinatesEnabled and Minimap:IsVisible() then
@@ -32,12 +32,12 @@ function QuestieCoords:WriteCoords()
 
             if position and position.x ~= 0 and position.y ~= 0  then
 
-                posX = position.x * 100.0;
-                posY = position.y * 100.0;
+                posX = position.x * 100.0
+                posY = position.y * 100.0
 
                 MinimapZoneText:SetText(
                     format("(%d, %d) ", posX, posY) .. GetMinimapZoneText()
-                );
+                )
             end
         end
     end
@@ -45,36 +45,36 @@ function QuestieCoords:WriteCoords()
     -- if main map
     if Questie.db.global.mapCoordinatesEnabled and WorldMapFrame:IsVisible() then
         -- get cursor position
-        local curX, curY = GetCursorPosition();
+        local curX, curY = GetCursorPosition()
 
-        local scale = WorldMapFrame:GetCanvas():GetEffectiveScale();
-        curX = curX / scale;
-        curY = curY / scale;
+        local scale = WorldMapFrame:GetCanvas():GetEffectiveScale()
+        curX = curX / scale
+        curY = curY / scale
 
-        local width = WorldMapFrame:GetCanvas():GetWidth();
-        local height = WorldMapFrame:GetCanvas():GetHeight();
-        local left = WorldMapFrame:GetCanvas():GetLeft();
-        local top = WorldMapFrame:GetCanvas():GetTop();
+        local width = WorldMapFrame:GetCanvas():GetWidth()
+        local height = WorldMapFrame:GetCanvas():GetHeight()
+        local left = WorldMapFrame:GetCanvas():GetLeft()
+        local top = WorldMapFrame:GetCanvas():GetTop()
 
-        curX = (curX - left) / width * 100;
-        curY = (top - curY) / height * 100;
+        curX = (curX - left) / width * 100
+        curY = (top - curY) / height * 100
 
-        local worldmapCoordsText = "Cursor: "..format(precision.. " X, ".. precision .." Y  ", curX, curY);
+        local worldmapCoordsText = "Cursor: "..format(precision.. " X, ".. precision .." Y  ", curX, curY)
 
 
         -- Player position
-        mapID = C_Map.GetBestMapForUnit("player");
+        mapID = C_Map.GetBestMapForUnit("player")
 
         if mapID then
-            position = C_Map.GetPlayerMapPosition(mapID, "player");
+            position = C_Map.GetPlayerMapPosition(mapID, "player")
         end
 
         if position and position.x ~= 0 and position.y ~= 0  then
 
-            posX = position.x * 100;
-            posY = position.y * 100;
+            posX = position.x * 100
+            posY = position.y * 100
 
-            worldmapCoordsText = worldmapCoordsText.."|  Player: "..format(precision.. " X , ".. precision .." Y", posX, posY);
+            worldmapCoordsText = worldmapCoordsText.."|  Player: "..format(precision.. " X , ".. precision .." Y", posX, posY)
         end
         -- Add text to world map
         GetMapTitleText():SetText(worldmapCoordsText)
@@ -82,27 +82,27 @@ function QuestieCoords:WriteCoords()
 end
 
 function QuestieCoords:Initialize()
-    --QuestieCoords.coordFrame = CreateFrame("Frame");
-    --QuestieCoords.coordFrame:SetScript("OnUpdate", QuestieCoords.Update);
-    C_Timer.NewTicker(QuestieCoords.updateInterval, QuestieCoords.Update)
+    --QuestieCoords.coordFrame = CreateFrame("Frame")
+    --QuestieCoords.coordFrame:SetScript("OnUpdate", QuestieCoords.Update)
+    C_Timer.NewTicker(self.updateInterval, self.Update)
 end
 
 function QuestieCoords:Update(elapsed)
     if (Questie.db.global.minimapCoordinatesEnabled) or
         (Questie.db.global.mapCoordinatesEnabled) then
 
-        --totalTime = totalTime + elapsed;
+        --totalTime = totalTime + elapsed
         --if(totalTime > QuestieCoords.updateInterval) then
-        --    totalTime = 0;
-            QuestieCoords.WriteCoords();
+        --    totalTime = 0
+            self.WriteCoords()
         --end
     end
 end
 
 function QuestieCoords:ResetMinimapText()
-    MinimapZoneText:SetText(GetMinimapZoneText());
+    MinimapZoneText:SetText(GetMinimapZoneText())
 end
 
 function QuestieCoords:ResetMapText()
-    GetMapTitleText():SetText(WORLD_MAP);
+    GetMapTitleText():SetText(WORLD_MAP)
 end

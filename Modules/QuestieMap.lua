@@ -8,8 +8,8 @@ local HBDMigrate = LibStub("HereBeDragonsQuestie-Migrate")
 
 
 -- copypaste from old questie (clean up later)
-QUESTIE_NOTES_CLUSTERMUL_HACK = 1; -- smaller numbers = less icons on map
-QuestieMap.MapCache_ClutterFix = {};
+QUESTIE_NOTES_CLUSTERMUL_HACK = 1 -- smaller numbers = less icons on map
+QuestieMap.MapCache_ClutterFix = {}
 
 function QuestieMap:DrawWorldMap(QuestID)
 
@@ -29,10 +29,10 @@ end
 
 function QuestieMap:UnloadQuestFrames(QuestId)
     if(qQuestIdFrames[QuestId]) then
-        for index, frame in ipairs(QuestieMap:GetFramesForQuest(QuestId)) do
-            frame:Unload();
+        for index, frame in ipairs(self:GetFramesForQuest(QuestId)) do
+            frame:Unload()
         end
-        qQuestIdFrames[QuestId] = nil;
+        qQuestIdFrames[QuestId] = nil
         Questie:Debug(DEBUG_DEVELOP, "[QuestieMap]: ".. QuestieLocale:GetUIString('DEBUG_UNLOAD_QFRAMES', QuestId))
     end
 end
@@ -43,12 +43,12 @@ function QuestieMap:rescaleIcons()
             local frame = _G[frameName]
             if frame and frame.data then
                 if(frame.data.GetIconScale) then
-                    frame.data.IconScale = frame.data:GetIconScale();
+                    frame.data.IconScale = frame.data:GetIconScale()
                     local scale = nil
                     if(frame.miniMapIcon) then
-                        scale = 16 * (frame.data.IconScale or 1) * (Questie.db.global.globalMiniMapScale or 0.7);
+                        scale = 16 * (frame.data.IconScale or 1) * (Questie.db.global.globalMiniMapScale or 0.7)
                     else
-                        scale = 16 * (frame.data.IconScale or 1) * (Questie.db.global.globalScale or 0.7);
+                        scale = 16 * (frame.data.IconScale or 1) * (Questie.db.global.globalScale or 0.7)
                     end
 
                     if scale > 1 then
@@ -56,7 +56,7 @@ function QuestieMap:rescaleIcons()
                         frame:SetHeight(scale)
                     end
                 else
-                    Questie:Error("A frame is lacking the GetIconScale function for resizing!", frame.data.Id);
+                    Questie:Error("A frame is lacking the GetIconScale function for resizing!", frame.data.Id)
                 end
             end
         end
@@ -82,8 +82,8 @@ function QuestieMap:DrawWorldIcon(data, AreaID, x, y, showFlag)
         --Questie:Error("No UiMapID for ("..tostring(zoneDataClassic[AreaID])..") :".. AreaID .. tostring(data.Name))
         return nil, nil
     end
-    if(showFlag == nil) then showFlag = HBD_PINS_WORLDMAP_SHOW_WORLD; end
-    if(floatOnEdge == nil) then floatOnEdge = true; end
+    if(showFlag == nil) then showFlag = HBD_PINS_WORLDMAP_SHOW_WORLD end
+    if(floatOnEdge == nil) then floatOnEdge = true end
 
     -- check toggles (not anymore, we need to add then hide)
     --if data.Type then
@@ -95,17 +95,17 @@ function QuestieMap:DrawWorldIcon(data, AreaID, x, y, showFlag)
     --end
 
     -- check clustering
-    local xcell = math.floor((x * (QUESTIE_NOTES_CLUSTERMUL_HACK)));
-    local ycell = math.floor((x * (QUESTIE_NOTES_CLUSTERMUL_HACK)));
+    local xcell = math.floor((x * (QUESTIE_NOTES_CLUSTERMUL_HACK)))
+    local ycell = math.floor((x * (QUESTIE_NOTES_CLUSTERMUL_HACK)))
 
-    if QuestieMap.MapCache_ClutterFix[AreaID] == nil then QuestieMap.MapCache_ClutterFix[AreaID] = {}; end
-    if QuestieMap.MapCache_ClutterFix[AreaID][xcell] == nil then QuestieMap.MapCache_ClutterFix[AreaID][xcell] = {}; end
-    if QuestieMap.MapCache_ClutterFix[AreaID][xcell][ycell] == nil then QuestieMap.MapCache_ClutterFix[AreaID][xcell][ycell] = {}; end
+    if self.MapCache_ClutterFix[AreaID] == nil then self.MapCache_ClutterFix[AreaID] = {} end
+    if self.MapCache_ClutterFix[AreaID][xcell] == nil then self.MapCache_ClutterFix[AreaID][xcell] = {} end
+    if self.MapCache_ClutterFix[AreaID][xcell][ycell] == nil then self.MapCache_ClutterFix[AreaID][xcell][ycell] = {} end
 
 
-    if (not data.ClusterId) or (not QuestieMap.MapCache_ClutterFix[AreaID][xcell][ycell][data.ClusterId]) then -- the reason why we only prevent adding to HBD is so its easy to "unhide" if we need to, and so the refs still exist
+    if (not data.ClusterId) or (not self.MapCache_ClutterFix[AreaID][xcell][ycell][data.ClusterId]) then -- the reason why we only prevent adding to HBD is so its easy to "unhide" if we need to, and so the refs still exist
         if data.ClusterId then
-            QuestieMap.MapCache_ClutterFix[AreaID][xcell][ycell][data.ClusterId] = true
+            self.MapCache_ClutterFix[AreaID][xcell][ycell][data.ClusterId] = true
         end
         --QuestieMap.MapCache_ClutterFix[AreaID][xcell][ycell][data.ObjectiveTargetId] = true
         local icon = QuestieFramePool:GetFrame()
@@ -113,9 +113,9 @@ function QuestieMap:DrawWorldIcon(data, AreaID, x, y, showFlag)
         icon.x = x
         icon.y = y
         icon.AreaID = AreaID
-        icon.miniMapIcon = false;
+        icon.miniMapIcon = false
         if AreaID then
-            data.UiMapID = zoneDataAreaIDToUiMapID[AreaID];
+            data.UiMapID = zoneDataAreaIDToUiMapID[AreaID]
         end
 
 
@@ -124,10 +124,10 @@ function QuestieMap:DrawWorldIcon(data, AreaID, x, y, showFlag)
         if data.IconColor ~= nil and Questie.db.global.questObjectiveColors then
             colors = data.IconColor
         end
-        icon.texture:SetVertexColor(colors[1], colors[2], colors[3], 1);
+        icon.texture:SetVertexColor(colors[1], colors[2], colors[3], 1)
         -- because of how frames work, I cant seem to set the glow as being behind the note. So for now things are draw in reverse.
         if data.IconScale then
-            local scale = 16 * (data:GetIconScale()*(Questie.db.global.globalScale or 0.7));
+            local scale = 16 * (data:GetIconScale()*(Questie.db.global.globalScale or 0.7))
             icon:SetWidth(scale)
             icon:SetHeight(scale)
         else
@@ -144,20 +144,20 @@ function QuestieMap:DrawWorldIcon(data, AreaID, x, y, showFlag)
         iconMinimap.AreaID = AreaID
         --data.refMiniMap = iconMinimap -- used for removing
         iconMinimap.texture:SetTexture(data.Icon)
-        iconMinimap.texture:SetVertexColor(1, 1, 1, 1);
+        iconMinimap.texture:SetVertexColor(1, 1, 1, 1)
         --Are we a minimap note?
-        iconMinimap.miniMapIcon = true;
+        iconMinimap.miniMapIcon = true
 
         if(not iconMinimap.fadeLogic) then
             function iconMinimap:fadeLogic()
                 if self.miniMapIcon and self.x and self.y and self.texture and self.texture.SetVertexColor and Questie and Questie.db and Questie.db.global and Questie.db.global.fadeLevel and HBD and HBD.GetPlayerZonePosition and QuestieFramePool and QuestieFramePool.euclid then
                     local playerX, playerY, playerInstanceID = HBD:GetPlayerZonePosition()
                     if(playerX and playerY) then
-                        local distance = QuestieFramePool:euclid(playerX, playerY, self.x / 100, self.y / 100);
+                        local distance = QuestieFramePool:euclid(playerX, playerY, self.x / 100, self.y / 100)
 
                         --Very small value before, hard to work with.
                         distance = distance * 10
-                        local NormalizedValue = 1 / (Questie.db.global.fadeLevel or 1.5);
+                        local NormalizedValue = 1 / (Questie.db.global.fadeLevel or 1.5)
 
                         if(distance > 0.6) then
                             self.texture:SetVertexColor(1, 1, 1, (1 - NormalizedValue * distance) + 0.5)
@@ -166,8 +166,8 @@ function QuestieMap:DrawWorldIcon(data, AreaID, x, y, showFlag)
                                 self.glowTexture:SetVertexColor(r,g,b,(1 - NormalizedValue * distance) + 0.5)
                             end
                         elseif (distance < Questie.db.global.fadeOverPlayerDistance) and Questie.db.global.fadeOverPlayer then
-                            local fadeAmount = QuestieFramePool:remap(distance, 0, Questie.db.global.fadeOverPlayerDistance, Questie.db.global.fadeOverPlayerLevel, 1);
-                           -- local fadeAmount = math.max(fadeAmount, 0.5);
+                            local fadeAmount = QuestieFramePool:remap(distance, 0, Questie.db.global.fadeOverPlayerDistance, Questie.db.global.fadeOverPlayerLevel, 1)
+                           -- local fadeAmount = math.max(fadeAmount, 0.5)
                             self.texture:SetVertexColor(1, 1, 1, fadeAmount)
                             if self.glowTexture and self.glowTexture.GetVertexColor then
                                 local r,g,b = self.glowTexture:GetVertexColor()
@@ -226,7 +226,7 @@ function QuestieMap:DrawWorldIcon(data, AreaID, x, y, showFlag)
         end
         
         
-        return icon, iconMinimap;
+        return icon, iconMinimap
     end
     return nil, nil
 end
@@ -255,7 +255,7 @@ function QuestieMap:GetRetailMapIDFromZoneDB(Zoneid)
     --Need to manually fix the names above to match.
     for continentID, Zones in pairs(Map) do
         for ZoneIDRetail, NameRetail in pairs(Zones) do
-            if(zoneDataClassic[Zoneid] == nil) then return nil; end
+            if(zoneDataClassic[Zoneid] == nil) then return nil end
             if(NameRetail == zoneDataClassic[Zoneid]) then
                 return continentID, ZoneIDRetail
             end
