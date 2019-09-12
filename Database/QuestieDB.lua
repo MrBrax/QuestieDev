@@ -52,15 +52,15 @@ QuestieDB._ZoneCache = {};
 
 function QuestieDB:Initialize()
     QuestieDBZone:zoneCreateConvertion()
-    QuestieDB:deleteClasses()
-    QuestieDB:deleteGatheringNodes()
+    self:deleteClasses()
+    self:deleteGatheringNodes()
 
     -- data has been corrected, ensure cache is empty (something might have accessed the api before questie initialized)
-    QuestieDB._QuestCache = {};
-    QuestieDB._ItemCache = {};
-    QuestieDB._NPCCache = {};
-    QuestieDB._ObjectCache = {};
-    QuestieDB._ZoneCache = {};
+    self._QuestCache = {};
+    self._ItemCache = {};
+    self._NPCCache = {};
+    self._ObjectCache = {};
+    self._ZoneCache = {};
 end
 
 function QuestieDB:ItemLookup(ItemId)
@@ -76,23 +76,23 @@ function QuestieDB:GetObject(ObjectID)
     if ObjectID == nil then
         return nil
     end
-    if QuestieDB._ObjectCache[ObjectID] ~= nil then
-        return QuestieDB._ObjectCache[ObjectID];
+    if self._ObjectCache[ObjectID] ~= nil then
+        return self._ObjectCache[ObjectID];
     end
     if QuestieCorrections.objectFixes[ObjectID] then
         for k,v in pairs(QuestieCorrections.objectFixes[ObjectID]) do
-            QuestieDB.objectData[ObjectID][k] = v
+            self.objectData[ObjectID][k] = v
         end
     end
-    local raw = QuestieDB.objectData[ObjectID];
+    local raw = self.objectData[ObjectID];
     if raw ~= nil then
         local obj = {};
         obj.id = ObjectID
         obj.type = "object"
-        for stringKey, intKey in pairs(QuestieDB.objectKeys) do
+        for stringKey, intKey in pairs(self.objectKeys) do
             obj[stringKey] = raw[intKey]
         end
-        QuestieDB._ObjectCache[ObjectID] = obj;
+        self._ObjectCache[ObjectID] = obj;
         return obj;
     else
         Questie:Debug(DEBUG_SPAM, "[QuestieQuest]: Missing container ", ObjectID)
@@ -103,8 +103,8 @@ function QuestieDB:GetItem(ItemID)
     if ItemID == nil then
         return nil
     end
-    if QuestieDB._ItemCache[ItemID] ~= nil then
-        return QuestieDB._ItemCache[ItemID];
+    if self._ItemCache[ItemID] ~= nil then
+        return self._ItemCache[ItemID];
     end
     local item = {};
     local raw = CHANGEME_Questie4_ItemDB[ItemID]; -- TODO: use the good item db, I need to talk to Muehe about the format, this is a temporary fix
@@ -126,7 +126,7 @@ function QuestieDB:GetItem(ItemID)
             table.insert(item.Sources, source);
         end
     end
-    QuestieDB._ItemCache[ItemID] = item;
+    self._ItemCache[ItemID] = item;
     return item
 end
 
@@ -138,8 +138,8 @@ function QuestieDB:GetQuest(QuestID) -- /dump QuestieDB:GetQuest(867)
     if QuestID == nil then
         return nil
     end
-    if QuestieDB._QuestCache[QuestID] ~= nil then
-        return QuestieDB._QuestCache[QuestID];
+    if self._QuestCache[QuestID] ~= nil then
+        return self._QuestCache[QuestID];
     end
     --[[     [916] = {"Webwood Venom",{{2082,},nil,nil,},{{2082,},nil,},3,4,"A",nil,nil,nil,{nil,nil,{{5166,nil},},},nil,nil,nil,nil,nil,nil,},
     --key
@@ -169,15 +169,15 @@ function QuestieDB:GetQuest(QuestID) -- /dump QuestieDB:GetQuest(867)
     -- 16 DB_EXCLUSIVE_QUEST_GROUP]]--
     if QuestieCorrections.questFixes[QuestID] then
         for k,v in pairs(QuestieCorrections.questFixes[QuestID]) do
-            QuestieDB.questData[QuestID][k] = v
+            self.questData[QuestID][k] = v
         end
     end
-    local rawdata = QuestieDB.questData[QuestID];
+    local rawdata = self.questData[QuestID];
     if(rawdata)then
         local QO = {}
         QO.GetColoredQuestName = _GetColoredQuestName
         QO.Id = QuestID --Key
-        for stringKey, intKey in pairs(QuestieDB.questKeys) do
+        for stringKey, intKey in pairs(self.questKeys) do
             QO[stringKey] = rawdata[intKey]
         end
         QO.Name = rawdata[1] --Name - 1
@@ -212,7 +212,7 @@ function QuestieDB:GetQuest(QuestID) -- /dump QuestieDB:GetQuest(867)
                     obj.Id = v
 
                     -- this speeds up lookup
-                    obj.Name = QuestieDB.npcData[v]
+                    obj.Name = self.npcData[v]
                     if obj.Name ~= nil then
                         local name = LangNameLookup[v] or obj.Name[1]
                         obj.Name = string.lower(name);
@@ -234,7 +234,7 @@ function QuestieDB:GetQuest(QuestID) -- /dump QuestieDB:GetQuest(867)
                     obj.Id = v
 
                     -- this speeds up lookup
-                    obj.Name = QuestieDB.objectData[v]
+                    obj.Name = self.objectData[v]
                     if obj.Name ~= nil then
                         obj.Name = string.lower(obj.Name[1]);
                     end
@@ -275,7 +275,7 @@ function QuestieDB:GetQuest(QuestID) -- /dump QuestieDB:GetQuest(867)
                     obj.Text = _v[2];
 
                     -- this speeds up lookup
-                    obj.Name = QuestieDB.npcData[obj.Id]
+                    obj.Name = self.npcData[obj.Id]
                     if obj.Name ~= nil then
                         local name = LangNameLookup[obj.Id] or obj.Name[1]
                         obj.Name = string.lower(name);
@@ -295,7 +295,7 @@ function QuestieDB:GetQuest(QuestID) -- /dump QuestieDB:GetQuest(867)
                     obj.Id = _v[1]
                     obj.Text = _v[2]
 
-                    obj.Name = QuestieDB.objectData[obj.Id]
+                    obj.Name = self.objectData[obj.Id]
                     if obj.Name ~= nil then
                         obj.Name = string.lower(obj.Name[1]);
                     end
@@ -373,7 +373,7 @@ function QuestieDB:GetQuest(QuestID) -- /dump QuestieDB:GetQuest(867)
             end
         end
 
-        QuestieDB._QuestCache[QuestID] = QO
+        self._QuestCache[QuestID] = QO
         return QO
     else
         return nil
@@ -419,44 +419,44 @@ function QuestieDB:GetNPC(NPCID)
     if NPCID == nil then
         return nil
     end
-    if(QuestieDB._NPCCache[NPCID]) then
-        return QuestieDB._NPCCache[NPCID]
+    if(self._NPCCache[NPCID]) then
+        return self._NPCCache[NPCID]
     end
     if QuestieCorrections.npcFixes[NPCID] then
         for k,v in pairs(QuestieCorrections.npcFixes[NPCID]) do
-            QuestieDB.npcData[NPCID][k] = v
+            self.npcData[NPCID][k] = v
         end
     end
-    local rawdata = QuestieDB.npcData[NPCID]
+    local rawdata = self.npcData[NPCID]
     if(rawdata)then
         local NPC = {}
         NPC.type = "monster"
         NPC.id = NPCID
-        for stringKey, intKey in pairs(QuestieDB.npcKeys) do
+        for stringKey, intKey in pairs(self.npcKeys) do
             NPC[stringKey] = rawdata[intKey]
         end
 
         if NPC.spawns == nil and Questie_SpecialNPCs[NPCID] then -- get spawns from script spawns list
-            NPC.spawns = QuestieDB:_GetSpecialNPC(NPCID).spawns
+            NPC.spawns = self:_GetSpecialNPC(NPCID).spawns
         end
 
         if rawdata[DB_NPC_FRIENDLY] then
             if rawdata[DB_NPC_FRIENDLY] == "AH" then
                 NPC.friendly = true
             else
-                if QuestieDB.FactionGroup == "Horde" and rawdata[DB_NPC_FRIENDLY] == "H" then
+                if self.FactionGroup == "Horde" and rawdata[DB_NPC_FRIENDLY] == "H" then
                     NPC.friendly = true
-                elseif QuestieDB.FactionGroup == "Alliance" and rawdata[DB_NPC_FRIENDLY] == "A" then
+                elseif self.FactionGroup == "Alliance" and rawdata[DB_NPC_FRIENDLY] == "A" then
                     NPC.friendly = true
                 end
             end
         else
             NPC.friendly = true
         end
-        QuestieDB._NPCCache[NPCID] = NPC
+        self._NPCCache[NPCID] = NPC
         return NPC
     else
-        return QuestieDB:_GetSpecialNPC(NPCID)
+        return self:_GetSpecialNPC(NPCID)
     end
 end
 
@@ -467,7 +467,7 @@ function QuestieDB:GetQuestsByName(questName)
 
     local returnTable = {};
 
-    for index, quest in pairs(QuestieDB.questData) do
+    for index, quest in pairs(self.questData) do
         local needle = string.lower(questName);
         local haystack = quest[1]
         local localizedQuest = LangQuestLookup[index]
@@ -490,7 +490,7 @@ function QuestieDB:GetNPCsByName(npcName)
 
     local returnTable = {};
 
-    for index, npc in pairs(QuestieDB.npcData) do
+    for index, npc in pairs(self.npcData) do
         local needle = string.lower(npcName);
         local haystack =  LangNameLookup[index] or npc[1]
         local lowerHaystack = string.lower(haystack);
@@ -510,18 +510,18 @@ function QuestieDB:GetQuestsByZoneId(zoneid)
     end
 
     -- in in cache return that
-    if QuestieDB._ZoneCache[zoneid] then
-        return QuestieDB._ZoneCache[zoneid]
+    if self._ZoneCache[zoneid] then
+        return self._ZoneCache[zoneid]
     end
 
     local zoneTable = {};
     -- loop over all quests to populate a zone
-    for qid, _ in pairs(QuestieDB.questData) do
-        local quest = QuestieDB:GetQuest(qid);
+    for qid, _ in pairs(self.questData) do
+        local quest = self:GetQuest(qid);
 
         if quest and quest.Starts then
             if quest.Starts.NPC then
-                local npc = QuestieDB:GetNPC(quest.Starts.NPC[1]);
+                local npc = self:GetNPC(quest.Starts.NPC[1]);
 
                 if npc and npc.spawns then
                     for zone, _ in pairs(npc.spawns) do
@@ -533,7 +533,7 @@ function QuestieDB:GetQuestsByZoneId(zoneid)
             end
 
             if quest.Starts.GameObject then
-                local obj = QuestieDB:GetObject(quest.Starts.GameObject[1]);
+                local obj = self:GetObject(quest.Starts.GameObject[1]);
 
                 if obj and obj.spawns then
                     for zone, _ in pairs(obj.spawns) do
@@ -547,7 +547,7 @@ function QuestieDB:GetQuestsByZoneId(zoneid)
         end
     end
 
-    QuestieDB._ZoneCache[zoneid] = zoneTable;
+    self._ZoneCache[zoneid] = zoneTable;
 
     return zoneTable;
 
@@ -601,7 +601,7 @@ function QuestieDB:deleteGatheringNodes()
         1731,1732,1733,1734,1735,123848,150082,175404,176643,177388,324,150079,176645,2040,123310 -- mining
     };
     for k,v in pairs(prune) do
-        QuestieDB.objectData[v][DB_OBJ_SPAWNS] = nil
+        self.objectData[v][DB_OBJ_SPAWNS] = nil
     end
 end
 
@@ -620,7 +620,7 @@ function unpackBinary(val)
     return ret;
 end
 
-function checkRace(race, dbRace)
+local function checkRace(race, dbRace)
     local valid = true;
     if race and dbRace and not (dbRace == 0) then
         local racemap = unpackBinary(dbRace);
@@ -629,7 +629,7 @@ function checkRace(race, dbRace)
     return valid;
 end
 
-function checkClass(class, dbClass)
+local function checkClass(class, dbClass)
     local valid = true;
 
     if class and dbClass and valid and not (dbRace == 0)then
@@ -645,7 +645,7 @@ function QuestieDB:deleteClasses() -- handles races too
     if englishClass and playerRace then
         local playerClass = string.lower(englishClass);
         playerRace = string.lower(playerRace);
-        for key, entry in pairs(QuestieDB.questData) do
+        for key, entry in pairs(self.questData) do
             local data = QuestieCorrections.questFixes[key] or entry
             if data[7] and data[7] ~= 0 then
                 if not checkClass(playerClass, data[7]) then
