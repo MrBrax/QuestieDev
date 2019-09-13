@@ -66,16 +66,18 @@ local function _GetNearestSpawn(Objective)
                     local dX, dY, dInstance = HBD:GetWorldCoordinatesFromZone(spawn[1]/100.0, spawn[2]/100.0, zoneDataAreaIDToUiMapID[zone])
                     --print (" " .. tostring(dX) .. " " .. tostring(dY) .. " " .. zoneDataAreaIDToUiMapID[zone])
                     local dist = HBD:GetWorldDistance(dInstance, playerX, playerY, dX, dY)
-                    if dInstance ~= playerI then
-                        dist = 500000 + dist * 100 -- hack
-                    end
-                    if dist < bestDistance then
-                        bestDistance = dist
-                        bestSpawn = spawn
-                        bestSpawnZone = zone
-                        bestSpawnId = id
-                        bestSpawnType = spawnData.Type
-                        bestSpawnName = spawnData.Name
+                    if dist then
+                        if dInstance ~= playerI then
+                            dist = 500000 + dist * 100 -- hack
+                        end
+                        if dist < bestDistance then
+                            bestDistance = dist
+                            bestSpawn = spawn
+                            bestSpawnZone = zone
+                            bestSpawnId = id
+                            bestSpawnType = spawnData.Type
+                            bestSpawnName = spawnData.Name
+                        end
                     end
                 end
             end
@@ -103,16 +105,18 @@ local function _GetNearestQuestSpawn(Quest)
                     local dX, dY, dInstance = HBD:GetWorldCoordinatesFromZone(spawn[1]/100.0, spawn[2]/100.0, zoneDataAreaIDToUiMapID[zone])
                     --print (" " .. tostring(dX) .. " " .. tostring(dY) .. " " .. zoneDataAreaIDToUiMapID[zone])
                     local dist = HBD:GetWorldDistance(dInstance, playerX, playerY, dX, dY)
-                    if dInstance ~= playerI then
-                        dist = 500000 + dist * 100 -- hack
-                    end
-                    if dist < bestDistance then
-                        bestDistance = dist
-                        bestSpawn = spawn
-                        bestSpawnZone = zone
-                        bestSpawnId = id
-                        bestSpawnType = Quest.Finisher.Type
-                        bestSpawnName = finisher.LocalizedName or finisher.name
+                    if dist then
+                        if dInstance ~= playerI then
+                            dist = 500000 + dist * 100 -- hack
+                        end
+                        if dist < bestDistance then
+                            bestDistance = dist
+                            bestSpawn = spawn
+                            bestSpawnZone = zone
+                            bestSpawnId = id
+                            bestSpawnType = Quest.Finisher.Type
+                            bestSpawnName = finisher.LocalizedName or finisher.name
+                        end
                     end
                 end
             end
