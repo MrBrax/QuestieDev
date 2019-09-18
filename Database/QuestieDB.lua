@@ -93,7 +93,12 @@ function QuestieDB:GetObject(ObjectID)
         for stringKey, intKey in pairs(self.objectKeys) do
             obj[stringKey] = raw[intKey]
         end
-        self._ObjectCache[ObjectID] = obj;
+        -- Do localization
+        local localizedName = LangObjectLookup[ObjectID]
+        if localizedName ~= nil then
+            obj.name = localizedName or obj.name
+        end
+        QuestieDB._ObjectCache[ObjectID] = obj;
         return obj;
     else
         Questie:Debug(DEBUG_SPAM, "[QuestieQuest]: Missing container ", ObjectID)
@@ -440,7 +445,11 @@ function QuestieDB:GetNPC(NPCID)
         for stringKey, intKey in pairs(self.npcKeys) do
             NPC[stringKey] = rawdata[intKey]
         end
-
+        -- Do localization
+        local localizedName = LangNameLookup[NPCID]
+        if localizedName ~=nil then
+            NPC.name = localizedName or NPC.name
+        end
         if NPC.spawns == nil and Questie_SpecialNPCs[NPCID] then -- get spawns from script spawns list
             NPC.spawns = self:_GetSpecialNPC(NPCID).spawns
         end
