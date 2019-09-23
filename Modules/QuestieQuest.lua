@@ -906,7 +906,6 @@ function QuestieQuest:GetAllQuestObjectives(Quest)
                 return {self.Collected, self.Needed, self.Completed}
             end
             Quest.Objectives[i]:Update()
-
             if count == 1 and counthack(Quest.ObjectiveData) == 1 then
                 Quest.Objectives[i].Id = Quest.ObjectiveData[1].Id
             elseif Quest.ObjectiveData ~= nil then
